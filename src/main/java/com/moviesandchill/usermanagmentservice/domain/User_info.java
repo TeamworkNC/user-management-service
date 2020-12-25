@@ -6,19 +6,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Movie {
+public class User_info {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;
-    private String name;
-    private String description;
+    private String firstName;
+    private String lastName;
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String first_name) {
+        this.firstName = first_name;
     }
 
     public Long getId() {
@@ -29,12 +29,12 @@ public class Movie {
         this._id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
     }
 
 
