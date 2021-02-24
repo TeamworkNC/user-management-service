@@ -1,4 +1,4 @@
-package com.moviesandchill.usermanagmentservice;
+package com.moviesandchill.usermanagementservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
