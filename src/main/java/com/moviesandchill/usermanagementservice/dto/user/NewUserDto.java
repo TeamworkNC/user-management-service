@@ -17,4 +17,6 @@ public class NewUserDto {
     private String logoUrl;
 
     private String description;
+
+    private String password;
 }

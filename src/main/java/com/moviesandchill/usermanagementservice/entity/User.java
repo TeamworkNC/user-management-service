@@ -22,4 +22,8 @@ public class User {
     private String description;
 
     private LocalDate registrationDate = LocalDate.now();
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private UserPassword password;
 }
