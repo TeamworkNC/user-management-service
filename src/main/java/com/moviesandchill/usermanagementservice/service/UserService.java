@@ -13,4 +13,10 @@ public interface UserService {
     User addUser(User user);
 
     void deleteUser(long userId);
+
+    List<User> getAllUserFriends(long userId);
+
+    void addUserFriend(long userId, long friendId);
+
+    boolean checkPassword(long userId, String password);
 }

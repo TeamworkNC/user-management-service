@@ -4,6 +4,7 @@ import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@Slf4j
 public class UserMapper {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
@@ -25,7 +27,10 @@ public class UserMapper {
         User user = modelMapper.map(dto, User.class);
         UserPassword userPassword = new UserPassword();
 
+        log.info(String.valueOf(dto.getPassword()));
         String passwordHash = passwordEncoder.encode(dto.getPassword());
+        log.info(passwordHash);
+
         userPassword.setPasswordHash(passwordHash);
         user.setPassword(userPassword);
         userPassword.setUser(user);

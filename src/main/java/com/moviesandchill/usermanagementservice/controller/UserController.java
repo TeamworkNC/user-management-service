@@ -49,4 +49,20 @@ public class UserController {
     public void deleteUser(@PathVariable long userId) {
         userService.deleteUser(userId);
     }
+
+    @GetMapping("/{userId}/friends")
+    public List<UserDto> getAllUserFriends(@PathVariable long userId) {
+        List<User> friends = userService.getAllUserFriends(userId);
+        return userMapper.mapToDto(friends);
+    }
+
+    @PostMapping("/{userId}/friends")
+    public void addUserFriend(@PathVariable long userId, @RequestBody long friendId) {
+        userService.addUserFriend(userId, friendId);
+    }
+
+    @PostMapping("/{userId}/check_password")
+    public boolean getUserPasswordHash(@PathVariable long userId, @RequestBody String password) {
+        return userService.checkPassword(userId, password);
+    }
 }

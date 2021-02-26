@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_info")
@@ -23,7 +24,14 @@ public class User {
 
     private LocalDate registrationDate = LocalDate.now();
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserPassword password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "friendship_info",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private Set<User> friends;
 }
