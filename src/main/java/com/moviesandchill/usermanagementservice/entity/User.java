@@ -1,6 +1,6 @@
 package com.moviesandchill.usermanagementservice.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,6 +9,9 @@ import java.util.Set;
 @Entity
 @Table(name = "user_info")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +27,18 @@ public class User {
 
     private LocalDate registrationDate = LocalDate.now();
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private UserPassword password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(
             name = "friendship_info",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<User> friends;
 }
