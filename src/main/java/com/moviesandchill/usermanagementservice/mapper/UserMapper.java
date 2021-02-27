@@ -26,10 +26,7 @@ public class UserMapper {
     public User mapToUser(NewUserDto dto) {
         User user = modelMapper.map(dto, User.class);
         UserPassword userPassword = new UserPassword();
-
-        log.info(String.valueOf(dto.getPassword()));
         String passwordHash = passwordEncoder.encode(dto.getPassword());
-        log.info(passwordHash);
 
         userPassword.setPasswordHash(passwordHash);
         user.setPassword(userPassword);

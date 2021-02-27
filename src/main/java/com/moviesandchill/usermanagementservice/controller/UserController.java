@@ -32,6 +32,11 @@ public class UserController {
         return userMapper.mapToDto(users);
     }
 
+    @DeleteMapping
+    public void deleteAllUsers() {
+        userService.deleteAllUsers();
+    }
+
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable long userId) {
         User user = userService.getUserById(userId).orElseThrow();

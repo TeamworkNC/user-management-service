@@ -3,71 +3,122 @@ package com.moviesandchill.usermanagementservice.service.impl;
 import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
 import com.moviesandchill.usermanagementservice.service.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class UserServiceImplTest {
 
-    User firstUser;
-    User secondUser;
+    private User firstUserExample;
+    private User secondUserExample;
+    private User thirdUserExample;
+
     @Autowired
     private UserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @BeforeEach
-    private void init() {
-        UserPassword firstUserPassword = new UserPassword();
-        firstUserPassword.setPasswordHash(passwordEncoder.encode("password"));
-        firstUser = User.builder()
-                .name("name")
-                .birthday(LocalDate.now())
-                .logoUrl("logo_url")
-                .description("description")
-                .registrationDate(LocalDate.now())
-                .password(firstUserPassword)
-                .build();
-        firstUserPassword.setUser(firstUser);
+    public void init() {
+        firstUserExample = createUserExample("first");
+        secondUserExample = createUserExample("second");
+        thirdUserExample = createUserExample("third");
+    }
 
-        UserPassword secondUserPassword = new UserPassword();
-        secondUserPassword.setPasswordHash(passwordEncoder.encode("password"));
-        secondUser = User.builder()
-                .name("name")
+    private User createUserExample(String username) {
+        UserPassword userPassword = new UserPassword();
+        userPassword.setPasswordHash(passwordEncoder.encode(username + " password"));
+        User user = User.builder()
+                .name(username + " name")
                 .birthday(LocalDate.now())
-                .logoUrl("logo_url")
-                .description("description")
+                .logoUrl(username + " logo_url")
+                .description(username + " description")
                 .registrationDate(LocalDate.now())
-                .password(secondUserPassword)
+                .password(userPassword)
                 .build();
-        secondUserPassword.setUser(secondUser);
+        userPassword.setUser(user);
+        return user;
+    }
+
+    @AfterEach
+    public void destruct() {
+        userService.deleteAllUsers();
     }
 
     @Test
-    void test1() {
-        assertThat(userService.getAllUsers()).isEmpty();
-        userService.addUser(firstUser);
+    public void testGetAllUsers() {
+        userService.addUser(firstUserExample);
+        userService.addUser(secondUserExample);
+
+        assertThat(userService.getAllUsers()).hasSize(2);
+    }
+
+    @Test
+    public void testGetUserById() {
+        User newUser = userService.addUser(firstUserExample);
+
+        User foundedUser = userService.getUserById(newUser.getUserId()).orElseThrow();
+
+        assertThat(foundedUser.getName()).isEqualTo(newUser.getName());
+    }
+
+    @Test
+    public void testAddUser() {
+        userService.addUser(firstUserExample);
+
         assertThat(userService.getAllUsers()).hasSize(1);
     }
 
     @Test
-    void test2() {
-        assertThat(userService.getAllUsers()).isEmpty();
+    public void testDeleteUser() {
+        User newFirstUser = userService.addUser(firstUserExample);
+        userService.addUser(secondUserExample);
+
+        userService.deleteUser(newFirstUser.getUserId());
+
+        assertThat(userService.getAllUsers()).hasSize(1);
     }
+
+    @Test
+    public void testGetAllUserFriends() {
+        User newFirstUser = userService.addUser(firstUserExample);
+        User newSecondUser = userService.addUser(secondUserExample);
+        User newThirdUser = userService.addUser(thirdUserExample);
+
+        userService.addUserFriend(newFirstUser.getUserId(), newSecondUser.getUserId());
+        userService.addUserFriend(newFirstUser.getUserId(), newThirdUser.getUserId());
+
+        assertThat(userService.getAllUserFriends(newFirstUser.getUserId())).hasSize(2);
+    }
+
+    @Test
+    public void testAddUserFriend_FriendAlreadyExist() {
+        User newFirstUser = userService.addUser(firstUserExample);
+        User newSecondUser = userService.addUser(secondUserExample);
+
+        userService.addUserFriend(newFirstUser.getUserId(), newSecondUser.getUserId());
+        userService.addUserFriend(newFirstUser.getUserId(), newSecondUser.getUserId());
+
+        assertThat(userService.getAllUserFriends(newFirstUser.getUserId())).hasSize(1);
+    }
+
+    @Test
+    public void testCheckPassword() {
+        User newFirstUser = userService.addUser(firstUserExample);
+
+        assertThat(userService.checkPassword(newFirstUser.getUserId(), "123")).isFalse();
+        assertThat(userService.checkPassword(newFirstUser.getUserId(), "first password")).isTrue();
+    }
+
 }
