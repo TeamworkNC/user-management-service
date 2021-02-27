@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -41,5 +42,13 @@ public class UserMapper {
 
     public UserDto mapToDto(User user) {
         return modelMapper.map(user, UserDto.class);
+    }
+
+    public Optional<UserDto> mapToDto(Optional<User> user) {
+        if (user.isPresent()) {
+            var dto = mapToDto(user.get());
+            return Optional.of(dto);
+        }
+        return Optional.empty();
     }
 }

@@ -1,6 +1,9 @@
 package com.moviesandchill.usermanagementservice.service.impl;
 
+import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
+import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;
+import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,16 +19,19 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        var users = userRepository.findAll();
+        return userMapper.mapToDto(users);
     }
 
     @Override
@@ -34,13 +40,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(long userId) {
-        return userRepository.findById(userId);
+    public Optional<UserDto> getUserById(long userId) {
+        var user = userRepository.findById(userId);
+        return userMapper.mapToDto(user);
     }
 
     @Override
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public UserDto addUser(NewUserDto dto) {
+        var user = userMapper.mapToUser(dto);
+        user = userRepository.save(user);
+        return userMapper.mapToDto(user);
     }
 
     @Override
@@ -49,9 +58,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUserFriends(long userId) {
+    public List<UserDto> getAllUserFriends(long userId) {
         User user = userRepository.findById(userId).orElseThrow();
-        return new ArrayList<>(user.getFriends());
+        var friends = new ArrayList<>(user.getFriends());
+        return userMapper.mapToDto(friends);
     }
 
     @Override
