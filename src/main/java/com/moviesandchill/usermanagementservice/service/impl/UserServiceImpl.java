@@ -1,5 +1,6 @@
 package com.moviesandchill.usermanagementservice.service.impl;
 
+import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;
@@ -73,9 +74,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkPassword(long userId, String password) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public Optional<UserDto> login(LoginRequestDto loginRequestDto) {
+        String name = loginRequestDto.getName();
+        String password = loginRequestDto.getPassword();
+
+        var optionalUser = userRepository.findByName(name);
+
+        if (optionalUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        User user = optionalUser.get();
+
         String hash = user.getPassword().getPasswordHash();
-        return passwordEncoder.matches(password, hash);
+
+        if (passwordEncoder.matches(password, hash)) {
+            return userMapper.mapToDto(Optional.of(user));
+        }
+        return Optional.empty();
     }
 }

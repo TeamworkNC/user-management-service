@@ -1,5 +1,6 @@
 package com.moviesandchill.usermanagementservice.controller;
 
+import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
@@ -60,8 +61,8 @@ public class UserController {
         userService.addUserFriend(userId, friendId);
     }
 
-    @PostMapping("/{userId}/check_password")
-    public boolean getUserPasswordHash(@PathVariable long userId, @RequestBody String password) {
-        return userService.checkPassword(userId, password);
+    @PostMapping("/login")
+    public UserDto login(@RequestBody LoginRequestDto loginRequestDto) {
+        return userService.login(loginRequestDto).orElseThrow();
     }
 }

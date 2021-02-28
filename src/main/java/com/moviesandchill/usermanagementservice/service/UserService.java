@@ -1,5 +1,6 @@
 package com.moviesandchill.usermanagementservice.service;
 
+import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 
@@ -21,5 +22,5 @@ public interface UserService {
 
     void addUserFriend(long userId, long friendId);
 
-    boolean checkPassword(long userId, String password);
+    Optional<UserDto> login(LoginRequestDto loginRequestDto);
 }

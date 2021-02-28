@@ -1,5 +1,6 @@
 package com.moviesandchill.usermanagementservice.service.impl;
 
+import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.service.UserService;
@@ -106,11 +107,25 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testCheckPassword() {
+    public void testLogin() {
         UserDto newFirstUser = userService.addUser(firstUserDtoExample);
+        LoginRequestDto goodLoginRequest = LoginRequestDto.builder()
+                .name(firstUserDtoExample.getName())
+                .password(firstUserDtoExample.getPassword())
+                .build();
+        LoginRequestDto badLoginRequest1 = LoginRequestDto.builder()
+                .name(firstUserDtoExample.getName())
+                .password("adjsapdhiuopahd")
+                .build();
+        LoginRequestDto badLoginRequest2 = LoginRequestDto.builder()
+                .name("asdasdasdwqad")
+                .password(firstUserDtoExample.getPassword())
+                .build();
 
-        assertThat(userService.checkPassword(newFirstUser.getUserId(), "123")).isFalse();
-        assertThat(userService.checkPassword(newFirstUser.getUserId(), "first password")).isTrue();
+
+        assertThat(userService.login(goodLoginRequest)).get().isEqualTo(newFirstUser);
+        assertThat(userService.login(badLoginRequest1)).isEmpty();
+        assertThat(userService.login(badLoginRequest2)).isEmpty();
     }
 
 }
