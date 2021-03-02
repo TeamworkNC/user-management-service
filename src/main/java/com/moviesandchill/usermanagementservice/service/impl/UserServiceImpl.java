@@ -4,6 +4,8 @@ import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;
+import com.moviesandchill.usermanagementservice.entity.UserPassword;
+import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
 import com.moviesandchill.usermanagementservice.service.UserService;
@@ -41,14 +43,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserDto> getUserById(long userId) {
-        var user = userRepository.findById(userId);
+    public UserDto getUserById(long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         return userMapper.mapToDto(user);
     }
 
     @Override
     public UserDto addUser(NewUserDto dto) {
-        var user = userMapper.mapToUser(dto);
+        User user = userMapper.mapToUser(dto);
+        UserPassword userPassword = new UserPassword();
+
+        String passwordHash = passwordEncoder.encode(dto.getPassword());
+        userPassword.setPasswordHash(passwordHash);
+
+        user.setPassword(userPassword);
+        userPassword.setUser(user);
+
         user = userRepository.save(user);
         return userMapper.mapToDto(user);
     }
@@ -66,9 +76,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUserFriend(long userId, long friendId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        User friend = userRepository.findById(friendId).orElseThrow();
+    public void addUserFriend(long userId, long friendId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
         user.getFriends().add(friend);
         userRepository.save(user);
     }
@@ -78,18 +88,19 @@ public class UserServiceImpl implements UserService {
         String name = loginRequestDto.getName();
         String password = loginRequestDto.getPassword();
 
-        var optionalUser = userRepository.findByName(name);
+        var userOptional = userRepository.findByName(name);
 
-        if (optionalUser.isEmpty()) {
+        if (userOptional.isEmpty()) {
             return Optional.empty();
         }
 
-        User user = optionalUser.get();
+        User user = userOptional.get();
 
         String hash = user.getPassword().getPasswordHash();
 
         if (passwordEncoder.matches(password, hash)) {
-            return userMapper.mapToDto(Optional.of(user));
+            UserDto dto = userMapper.mapToDto(user);
+            return Optional.of(dto);
         }
         return Optional.empty();
     }

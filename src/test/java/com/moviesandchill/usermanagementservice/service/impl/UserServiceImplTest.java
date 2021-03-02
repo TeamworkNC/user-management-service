@@ -3,6 +3,7 @@ package com.moviesandchill.usermanagementservice.service.impl;
 import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
+import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -58,12 +60,21 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testGetUserById() {
+    public void testGetUserById__userExist() throws UserNotFoundException {
         UserDto newUser = userService.addUser(firstUserDtoExample);
 
-        UserDto foundedUser = userService.getUserById(newUser.getUserId()).orElseThrow();
+        UserDto foundedUser = userService.getUserById(newUser.getUserId());
 
         assertThat(foundedUser.getName()).isEqualTo(newUser.getName());
+    }
+
+    @Test
+    public void testGetUserById__userNotExist() {
+        userService.addUser(firstUserDtoExample);
+
+        assertThatThrownBy(
+                () -> userService.getUserById(Integer.MAX_VALUE))
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -84,7 +95,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testGetAllUserFriends() {
+    public void testGetAllUserFriends() throws UserNotFoundException {
         UserDto newFirstUser = userService.addUser(firstUserDtoExample);
         UserDto newSecondUser = userService.addUser(secondUserDtoExample);
         UserDto newThirdUser = userService.addUser(thirdUserDtoExample);
@@ -96,7 +107,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testAddUserFriend_FriendAlreadyExist() {
+    public void testAddUserFriend_FriendAlreadyExist() throws UserNotFoundException {
         UserDto newFirstUser = userService.addUser(firstUserDtoExample);
         UserDto newSecondUser = userService.addUser(secondUserDtoExample);
 
