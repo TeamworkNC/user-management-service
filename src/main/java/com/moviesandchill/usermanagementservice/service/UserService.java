@@ -1,7 +1,9 @@
 package com.moviesandchill.usermanagementservice.service;
 
+import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
+import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +13,7 @@ public interface UserService {
 
     void deleteAllUsers();
 
-    Optional<UserDto> getUserById(long userId);
+    UserDto getUserById(long userId) throws UserNotFoundException;
 
     UserDto addUser(NewUserDto user);
 
@@ -19,7 +21,7 @@ public interface UserService {
 
     List<UserDto> getAllUserFriends(long userId);
 
-    void addUserFriend(long userId, long friendId);
+    void addUserFriend(long userId, long friendId) throws UserNotFoundException;
 
-    boolean checkPassword(long userId, String password);
+    Optional<UserDto> login(LoginRequestDto loginRequestDto);
 }

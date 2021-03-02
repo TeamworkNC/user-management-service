@@ -1,8 +1,9 @@
 package com.moviesandchill.usermanagementservice.controller;
 
+import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
-import com.moviesandchill.usermanagementservice.mapper.UserMapper;
+import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userMapper = userMapper;
     }
 
     @GetMapping
@@ -36,8 +35,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserDto getUserById(@PathVariable long userId) {
-        return userService.getUserById(userId).orElseThrow();
+    public UserDto getUserById(@PathVariable long userId) throws UserNotFoundException {
+        return userService.getUserById(userId);
     }
 
     @PostMapping
@@ -56,12 +55,12 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/friends")
-    public void addUserFriend(@PathVariable long userId, @RequestBody long friendId) {
+    public void addUserFriend(@PathVariable long userId, @RequestBody long friendId) throws UserNotFoundException {
         userService.addUserFriend(userId, friendId);
     }
 
-    @PostMapping("/{userId}/check_password")
-    public boolean getUserPasswordHash(@PathVariable long userId, @RequestBody String password) {
-        return userService.checkPassword(userId, password);
+    @PostMapping("/login")
+    public UserDto login(@RequestBody LoginRequestDto loginRequestDto) {
+        return userService.login(loginRequestDto).orElseThrow();
     }
 }

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Builder
 public class UserPassword {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userPasswordId;
 
     String passwordHash;

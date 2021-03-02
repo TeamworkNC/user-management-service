@@ -14,9 +14,10 @@ import java.util.Set;
 @Builder
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(unique = true)
     private String name;
 
     private LocalDate birthday;
