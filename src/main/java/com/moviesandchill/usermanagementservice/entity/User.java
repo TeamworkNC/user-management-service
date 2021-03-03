@@ -41,4 +41,13 @@ public class User {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<User> friends;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_achievements",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "achievement_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Achievement> achievements;
 }

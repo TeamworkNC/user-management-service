@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/friends")
-    public List<UserDto> getAllUserFriends(@PathVariable long userId) {
+    public List<UserDto> getAllUserFriends(@PathVariable long userId) throws UserNotFoundException {
         return userService.getAllUserFriends(userId);
     }
 
