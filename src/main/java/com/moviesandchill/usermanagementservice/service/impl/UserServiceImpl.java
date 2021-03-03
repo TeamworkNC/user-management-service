@@ -7,6 +7,7 @@ import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
+import com.moviesandchill.usermanagementservice.repository.AchievementRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,11 +23,13 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final AchievementRepository achievementRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, AchievementRepository achievementRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.achievementRepository = achievementRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
