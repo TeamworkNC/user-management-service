@@ -1,11 +1,15 @@
 package com.moviesandchill.usermanagementservice.service.impl;
 
+import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
+import com.moviesandchill.usermanagementservice.entity.Achievement;
 import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
+import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
+import com.moviesandchill.usermanagementservice.mapper.AchievementMapper;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.AchievementRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
@@ -25,12 +29,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AchievementRepository achievementRepository;
     private final UserMapper userMapper;
+    private final AchievementMapper achievementMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, AchievementRepository achievementRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, AchievementRepository achievementRepository, UserMapper userMapper, AchievementMapper achievementMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.achievementRepository = achievementRepository;
         this.userMapper = userMapper;
+        this.achievementMapper = achievementMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -72,8 +78,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUserFriends(long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public List<UserDto> getAllUserFriends(long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         var friends = new ArrayList<>(user.getFriends());
         return userMapper.mapToDto(friends);
     }
@@ -84,6 +90,28 @@ public class UserServiceImpl implements UserService {
         User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
         user.getFriends().add(friend);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<AchievementDto> getAllUserAchievements(long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        var achievements = new ArrayList<>(user.getAchievements());
+        return achievementMapper.mapToDto(achievements);
+    }
+
+    @Override
+    public void addUserAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        user.getAchievements().add(achievement);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUserAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        user.getAchievements().remove(achievement);
     }
 
     @Override
