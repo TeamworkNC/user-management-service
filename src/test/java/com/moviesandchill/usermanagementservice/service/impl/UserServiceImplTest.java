@@ -31,7 +31,6 @@ class UserServiceImplTest {
 
     private final NewAchievementDto firstNewAchievementDtoExample = createNewAchievementDto("first");
     private final NewAchievementDto secondNewAchievementDtoExample = createNewAchievementDto("second");
-    private final NewAchievementDto thirdNewAchievementDtoExample = createNewAchievementDto("third");
 
 
     @Autowired
@@ -74,7 +73,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void testGetUserById__userExist() throws UserNotFoundException {
+    public void testGetUserById_userExist() throws UserNotFoundException {
         UserDto newUser = userService.addUser(firstUserDtoExample);
 
         UserDto foundedUser = userService.getUserById(newUser.getUserId());

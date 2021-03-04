@@ -29,7 +29,8 @@ public interface UserService {
 
     void addUserAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException;
 
-    void deleteUserAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException;
+    void deleteUserAchievement(long userId, long achievementId)
+            throws UserNotFoundException, AchievementNotFoundException;
 
     Optional<UserDto> login(LoginRequestDto loginRequestDto);
 }

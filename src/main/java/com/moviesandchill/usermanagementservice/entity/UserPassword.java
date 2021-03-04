@@ -15,7 +15,7 @@ public class UserPassword {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userPasswordId;
 
-    String passwordHash;
+    private String passwordHash;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn

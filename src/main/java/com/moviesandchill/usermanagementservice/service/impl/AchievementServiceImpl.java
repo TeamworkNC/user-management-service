@@ -39,7 +39,10 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Override
     public AchievementDto getAchievementById(long achievementId) throws AchievementNotFoundException {
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        Achievement achievement = achievementRepository.
+                findById(achievementId)
+                .orElseThrow(AchievementNotFoundException::new);
+
         return achievementMapper.mapToDto(achievement);
     }
 
