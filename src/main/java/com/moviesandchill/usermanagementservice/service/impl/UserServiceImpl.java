@@ -32,7 +32,13 @@ public class UserServiceImpl implements UserService {
     private final AchievementMapper achievementMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, AchievementRepository achievementRepository, UserMapper userMapper, AchievementMapper achievementMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            AchievementRepository achievementRepository,
+            UserMapper userMapper,
+            AchievementMapper achievementMapper,
+            PasswordEncoder passwordEncoder
+    ) {
         this.userRepository = userRepository;
         this.achievementRepository = achievementRepository;
         this.userMapper = userMapper;
@@ -100,17 +106,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUserAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+    public void addUserAchievement(long userId, long achievementId)
+            throws UserNotFoundException, AchievementNotFoundException {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+        Achievement achievement = achievementRepository
+                .findById(achievementId)
+                .orElseThrow(AchievementNotFoundException::new);
+
         user.getAchievements().add(achievement);
         userRepository.save(user);
     }
 
     @Override
-    public void deleteUserAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+    public void deleteUserAchievement(long userId, long achievementId)
+            throws UserNotFoundException, AchievementNotFoundException {
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        Achievement achievement = achievementRepository
+                .findById(achievementId)
+                .orElseThrow(AchievementNotFoundException::new);
+
         user.getAchievements().remove(achievement);
     }
 
