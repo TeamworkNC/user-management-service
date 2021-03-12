@@ -10,13 +10,13 @@ import java.util.List;
 public interface AchievementService {
     List<AchievementDto> getAllAchievements();
 
+    AchievementDto addAchievement(NewAchievementDto newAchievementDto);
+
     void deleteAllAchievements();
 
-    AchievementDto getAchievementById(long achievementId) throws AchievementNotFoundException;
-
-    AchievementDto addAchievement(NewAchievementDto newAchievementDto);
+    AchievementDto getAchievement(long achievementId) throws AchievementNotFoundException;
 
     void updateAchievement(long achievementId, UpdateAchievementDto updateAchievementDto) throws AchievementNotFoundException;
 
-    void deleteAchievement(long achievementId);
+    void deleteAchievement(long achievementId) throws AchievementNotFoundException;
 }

@@ -19,6 +19,19 @@ class AchievementServiceImplTest {
     @Autowired
     private AchievementService achievementService;
 
+    @Test
+    public void testUpdateAchievement() throws AchievementNotFoundException {
+        var newAchievementDto = createNewAchievementDto("first");
+        var updateAchievementDto = createUpdateAchievementDto("second");
+
+        var achievementDto = achievementService.addAchievement(newAchievementDto);
+        var achievementDtoId = achievementDto.getAchievementId();
+        achievementService.updateAchievement(achievementDtoId, updateAchievementDto);
+
+        assertThat(achievementService.getAchievement(achievementDtoId).getName()).isEqualTo("second name");
+    }
+
+
     private NewAchievementDto createNewAchievementDto(String name) {
         return NewAchievementDto.builder()
                 .name(name + " name")
@@ -34,17 +47,4 @@ class AchievementServiceImplTest {
                 .logoUrl(name + " logo url")
                 .build();
     }
-
-    @Test
-    public void testUpdateAchievement() throws AchievementNotFoundException {
-        var newAchievementDto = createNewAchievementDto("first");
-        var updateAchievementDto = createUpdateAchievementDto("second");
-
-        var achievementDto = achievementService.addAchievement(newAchievementDto);
-        var achievementDtoId = achievementDto.getAchievementId();
-        achievementService.updateAchievement(achievementDtoId, updateAchievementDto);
-
-        assertThat(achievementService.getAchievementById(achievementDtoId).getName()).isEqualTo("second name");
-    }
-
 }

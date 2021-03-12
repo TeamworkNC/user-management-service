@@ -40,17 +40,17 @@ public class AchievementController {
     }
 
     @GetMapping("/{achievementId}")
-    private AchievementDto getAchievementById(@PathVariable long achievementId) throws AchievementNotFoundException {
-        return achievementService.getAchievementById(achievementId);
+    private AchievementDto getAchievement(@PathVariable long achievementId) throws AchievementNotFoundException {
+        return achievementService.getAchievement(achievementId);
     }
 
     @PutMapping("/{achievementId}")
-    public void deleteAchievement(@PathVariable long achievementId, @RequestBody UpdateAchievementDto updateAchievementDto) throws AchievementNotFoundException {
+    public void updateAchievement(@PathVariable long achievementId, @RequestBody UpdateAchievementDto updateAchievementDto) throws AchievementNotFoundException {
         achievementService.updateAchievement(achievementId, updateAchievementDto);
     }
 
     @DeleteMapping("/{achievementId}")
-    private void deleteAchievement(@PathVariable long achievementId) {
+    private void deleteAchievement(@PathVariable long achievementId) throws AchievementNotFoundException {
         achievementService.deleteAchievement(achievementId);
     }
 }

@@ -17,11 +17,11 @@ import java.util.List;
         produces = "application/json"
 )
 @Slf4j
-public class UserController {
+public class UsersController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UsersController(UserService userService) {
         this.userService = userService;
     }
 
@@ -37,7 +37,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable long userId) throws UserNotFoundException {
-        return userService.getUserById(userId);
+        return userService.getUser(userId);
     }
 
     @PostMapping
@@ -50,20 +50,7 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
-    @GetMapping("/{userId}/friends")
-    public List<UserDto> getAllUserFriends(@PathVariable long userId) throws UserNotFoundException {
-        return userService.getAllUserFriends(userId);
-    }
 
-    @PostMapping("/{userId}/friends")
-    public void addUserFriend(@PathVariable long userId, @RequestBody long friendId) throws UserNotFoundException {
-        userService.addUserFriend(userId, friendId);
-    }
-
-    @DeleteMapping("/{userId}/friends")
-    public void addAllUserFriends(@PathVariable long userId) throws UserNotFoundException {
-        userService.deleteAllUserFriends(userId);
-    }
 
     @PutMapping("/{userId}/password")
     public boolean updateUserPassword(@PathVariable long userId, @RequestBody UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
