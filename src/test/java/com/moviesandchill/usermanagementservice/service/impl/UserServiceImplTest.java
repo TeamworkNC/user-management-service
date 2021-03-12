@@ -42,7 +42,9 @@ class UserServiceImplTest {
 
     private NewUserDto createNewUserDto(String username) {
         return NewUserDto.builder()
-                .name(username + " name")
+                .login(username + " login")
+                .firstName(username + " first_name")
+                .lastName(username + " last_name")
                 .birthday(LocalDate.now())
                 .logoUrl(username + " logo_url")
                 .description(username + " description")
@@ -78,7 +80,7 @@ class UserServiceImplTest {
 
         UserDto foundedUser = userService.getUserById(newUser.getUserId());
 
-        assertThat(foundedUser.getName()).isEqualTo(newUser.getName());
+        assertThat(foundedUser).isEqualTo(newUser);
     }
 
     @Test
@@ -159,15 +161,15 @@ class UserServiceImplTest {
     public void testLogin() {
         UserDto newFirstUser = userService.addUser(firstUserDtoExample);
         LoginRequestDto goodLoginRequest = LoginRequestDto.builder()
-                .name(firstUserDtoExample.getName())
+                .login(firstUserDtoExample.getLogin())
                 .password(firstUserDtoExample.getPassword())
                 .build();
         LoginRequestDto badLoginRequest1 = LoginRequestDto.builder()
-                .name(firstUserDtoExample.getName())
+                .login(firstUserDtoExample.getLogin())
                 .password("adjsapdhiuopahd")
                 .build();
         LoginRequestDto badLoginRequest2 = LoginRequestDto.builder()
-                .name("asdasdasdwqad")
+                .login("asdasdasdwqad")
                 .password(firstUserDtoExample.getPassword())
                 .build();
 

@@ -18,7 +18,11 @@ public class User {
     private Long userId;
 
     @Column(unique = true)
-    private String name;
+    private String login;
+
+    private String firstName;
+
+    private String lastName;
 
     private LocalDate birthday;
 

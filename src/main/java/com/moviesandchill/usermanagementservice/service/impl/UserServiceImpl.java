@@ -135,10 +135,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> login(LoginRequestDto loginRequestDto) {
-        String name = loginRequestDto.getName();
+        String login = loginRequestDto.getLogin();
         String password = loginRequestDto.getPassword();
 
-        var userOptional = userRepository.findByName(name);
+        var userOptional = userRepository.findByLogin(login);
 
         if (userOptional.isEmpty()) {
             return Optional.empty();
