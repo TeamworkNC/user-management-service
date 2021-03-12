@@ -2,6 +2,7 @@ package com.moviesandchill.usermanagementservice.service;
 
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
+import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
@@ -31,6 +32,8 @@ public interface UserService {
 
     void deleteUserAchievement(long userId, long achievementId)
             throws UserNotFoundException, AchievementNotFoundException;
+
+    boolean updateUserPassword(long userId, UpdatePasswordDto updatePasswordDto) throws UserNotFoundException;
 
     Optional<UserDto> login(LoginRequestDto loginRequestDto);
 }

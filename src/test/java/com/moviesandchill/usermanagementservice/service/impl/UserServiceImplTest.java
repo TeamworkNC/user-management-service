@@ -3,6 +3,7 @@ package com.moviesandchill.usermanagementservice.service.impl;
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
 import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
+import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
@@ -155,6 +156,41 @@ class UserServiceImplTest {
         userService.deleteUserAchievement(newFirstUser.getUserId(), newFirstAchievement.getAchievementId());
 
         assertThat(userService.getAllUserAchievements(newFirstUser.getUserId())).hasSize(1);
+    }
+
+    @Test
+    void testUpdateUserPassword_UserNotExist() {
+        UserDto newFirstUser = userService.addUser(firstUserDtoExample);
+        UpdatePasswordDto updatePasswordDto = UpdatePasswordDto.builder()
+                .oldPassword("first user password")
+                .newPassword("strong password")
+                .build();
+
+        assertThatThrownBy(() -> {
+            userService.updateUserPassword(9999, updatePasswordDto);
+        }).isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void testUpdateUserPassword_CorrectOldPassword() throws UserNotFoundException {
+        UserDto newFirstUser = userService.addUser(firstUserDtoExample);
+        UpdatePasswordDto updatePasswordDto = UpdatePasswordDto.builder()
+                .oldPassword("first password")
+                .newPassword("strong password")
+                .build();
+
+        assertThat(userService.updateUserPassword(newFirstUser.getUserId(), updatePasswordDto)).isTrue();
+    }
+
+    @Test
+    void testUpdateUserPassword_IncorrectOldPassword() throws UserNotFoundException {
+        UserDto newFirstUser = userService.addUser(firstUserDtoExample);
+        UpdatePasswordDto updatePasswordDto = UpdatePasswordDto.builder()
+                .oldPassword("wrong password")
+                .newPassword("strong password")
+                .build();
+
+        assertThat(userService.updateUserPassword(newFirstUser.getUserId(), updatePasswordDto)).isFalse();
     }
 
     @Test

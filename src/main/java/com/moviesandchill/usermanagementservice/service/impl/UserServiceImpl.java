@@ -2,6 +2,7 @@ package com.moviesandchill.usermanagementservice.service.impl;
 
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
+import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.Achievement;
@@ -131,6 +132,20 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(AchievementNotFoundException::new);
 
         user.getAchievements().remove(achievement);
+    }
+
+    @Override
+    public boolean updateUserPassword(long userId, UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
+        String oldPassword = updatePasswordDto.getOldPassword();
+        String newPassword = updatePasswordDto.getNewPassword();
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        if (passwordEncoder.matches(oldPassword, user.getPassword().getPasswordHash())) {
+            String newPasswordHash = passwordEncoder.encode(newPassword);
+            user.getPassword().setPasswordHash(newPasswordHash);
+            return true;
+        }
+        return false;
     }
 
     @Override

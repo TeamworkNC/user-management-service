@@ -1,6 +1,7 @@
 package com.moviesandchill.usermanagementservice.controller;
 
 import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
+import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
@@ -57,6 +58,11 @@ public class UserController {
     @PostMapping("/{userId}/friends")
     public void addUserFriend(@PathVariable long userId, @RequestBody long friendId) throws UserNotFoundException {
         userService.addUserFriend(userId, friendId);
+    }
+
+    @PutMapping("/{userId}/password")
+    public boolean updateUserPassword(@PathVariable long userId, @RequestBody UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
+        return userService.updateUserPassword(userId, updatePasswordDto);
     }
 
     @PostMapping("/login")
