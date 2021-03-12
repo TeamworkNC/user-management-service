@@ -2,6 +2,7 @@ package com.moviesandchill.usermanagementservice.mapper;
 
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
+import com.moviesandchill.usermanagementservice.dto.achievement.UpdateAchievementDto;
 import com.moviesandchill.usermanagementservice.entity.Achievement;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValueCheckStrategy;
@@ -16,6 +17,8 @@ import java.util.List;
 )
 public interface AchievementMapper {
     Achievement mapToEntity(NewAchievementDto dto);
+
+    Achievement mapToEntity(UpdateAchievementDto dto);
 
     List<AchievementDto> mapToDto(List<Achievement> entities);
 

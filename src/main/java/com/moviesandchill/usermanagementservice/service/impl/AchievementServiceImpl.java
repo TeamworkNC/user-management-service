@@ -2,6 +2,7 @@ package com.moviesandchill.usermanagementservice.service.impl;
 
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
+import com.moviesandchill.usermanagementservice.dto.achievement.UpdateAchievementDto;
 import com.moviesandchill.usermanagementservice.entity.Achievement;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.AchievementMapper;
@@ -51,6 +52,18 @@ public class AchievementServiceImpl implements AchievementService {
         Achievement achievement = achievementMapper.mapToEntity(newAchievementDto);
         achievement = achievementRepository.save(achievement);
         return achievementMapper.mapToDto(achievement);
+    }
+
+    @Override
+    public void updateAchievement(long achievementId, UpdateAchievementDto updateAchievementDto) throws AchievementNotFoundException {
+        if (achievementRepository.findById(achievementId).isEmpty()) {
+            throw new AchievementNotFoundException();
+        }
+
+        Achievement achievement = achievementMapper.mapToEntity(updateAchievementDto);
+        achievement.setAchievementId(achievementId);
+
+        achievementRepository.save(achievement);
     }
 
     @Override

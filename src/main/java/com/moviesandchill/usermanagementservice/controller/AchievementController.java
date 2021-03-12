@@ -2,6 +2,7 @@ package com.moviesandchill.usermanagementservice.controller;
 
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
+import com.moviesandchill.usermanagementservice.dto.achievement.UpdateAchievementDto;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
 import com.moviesandchill.usermanagementservice.service.AchievementService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,11 @@ public class AchievementController {
         return achievementService.getAllAchievements();
     }
 
+    @PostMapping
+    private AchievementDto addAchievement(@RequestBody NewAchievementDto newAchievementDto) {
+        return achievementService.addAchievement(newAchievementDto);
+    }
+
     @DeleteMapping
     private void deleteAllAchievements() {
         achievementService.deleteAllAchievements();
@@ -38,9 +44,9 @@ public class AchievementController {
         return achievementService.getAchievementById(achievementId);
     }
 
-    @PostMapping
-    private AchievementDto addAchievement(@RequestBody NewAchievementDto newAchievementDto) {
-        return achievementService.addAchievement(newAchievementDto);
+    @PutMapping("/{achievementId}")
+    public void deleteAchievement(@PathVariable long achievementId, @RequestBody UpdateAchievementDto updateAchievementDto) throws AchievementNotFoundException {
+        achievementService.updateAchievement(achievementId, updateAchievementDto);
     }
 
     @DeleteMapping("/{achievementId}")
