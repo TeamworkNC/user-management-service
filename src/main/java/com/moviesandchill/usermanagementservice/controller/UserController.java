@@ -60,6 +60,11 @@ public class UserController {
         userService.addUserFriend(userId, friendId);
     }
 
+    @DeleteMapping("/{userId}/friends")
+    public void addAllUserFriends(@PathVariable long userId) throws UserNotFoundException {
+        userService.deleteAllUserFriends(userId);
+    }
+
     @PutMapping("/{userId}/password")
     public boolean updateUserPassword(@PathVariable long userId, @RequestBody UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
         return userService.updateUserPassword(userId, updatePasswordDto);

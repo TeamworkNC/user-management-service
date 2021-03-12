@@ -92,6 +92,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deleteAllUserFriends(long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        user.getFriends().clear();
+        userRepository.save(user);
+    }
+
+    @Override
     public void addUserFriend(long userId, long friendId) throws UserNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);

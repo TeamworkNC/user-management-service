@@ -24,6 +24,8 @@ public interface UserService {
 
     List<UserDto> getAllUserFriends(long userId) throws UserNotFoundException;
 
+    void deleteAllUserFriends(long userId) throws UserNotFoundException;
+
     void addUserFriend(long userId, long friendId) throws UserNotFoundException;
 
     List<AchievementDto> getAllUserAchievements(long userId) throws UserNotFoundException;
@@ -36,4 +38,6 @@ public interface UserService {
     boolean updateUserPassword(long userId, UpdatePasswordDto updatePasswordDto) throws UserNotFoundException;
 
     Optional<UserDto> login(LoginRequestDto loginRequestDto);
+
+
 }

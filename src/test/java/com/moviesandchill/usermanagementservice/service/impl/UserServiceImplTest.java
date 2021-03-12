@@ -215,4 +215,18 @@ class UserServiceImplTest {
         assertThat(userService.login(badLoginRequest2)).isEmpty();
     }
 
+    @Test
+    public void testDeleteAllUserFriends() throws UserNotFoundException {
+        var firstUserDto = userService.addUser(firstUserDtoExample);
+        var secondUserDto = userService.addUser(secondUserDtoExample);
+        var thirdUserDto = userService.addUser(thirdUserDtoExample);
+
+        userService.addUserFriend(firstUserDto.getUserId(), secondUserDto.getUserId());
+        userService.addUserFriend(firstUserDto.getUserId(), thirdUserDto.getUserId());
+        assertThat(userService.getAllUserFriends(firstUserDto.getUserId())).hasSize(2);
+
+        userService.deleteAllUserFriends(firstUserDto.getUserId());
+        assertThat(userService.getAllUserFriends(firstUserDto.getUserId())).hasSize(0);
+    }
+
 }
