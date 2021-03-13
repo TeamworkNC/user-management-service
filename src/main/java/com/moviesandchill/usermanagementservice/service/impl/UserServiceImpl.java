@@ -26,11 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(
-            UserRepository userRepository,
-            UserMapper userMapper,
-            PasswordEncoder passwordEncoder
-    ) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
@@ -64,13 +60,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
         return userMapper.mapToDto(user);
     }
 
     @Override
     public void updateUser(long userId, UpdateUserDto updateUserDto) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
         userMapper.updateEntity(user, updateUserDto);
     }
 
@@ -83,7 +79,7 @@ public class UserServiceImpl implements UserService {
     public boolean updateUserPassword(long userId, UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
         String oldPassword = updatePasswordDto.getOldPassword();
         String newPassword = updatePasswordDto.getNewPassword();
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
 
         if (passwordEncoder.matches(oldPassword, user.getPassword().getPasswordHash())) {
             String newPasswordHash = passwordEncoder.encode(newPassword);
@@ -113,5 +109,9 @@ public class UserServiceImpl implements UserService {
             return Optional.of(dto);
         }
         return Optional.empty();
+    }
+
+    private User findUserById(long userId) throws UserNotFoundException {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 }

@@ -31,7 +31,6 @@ public class UserFavoriteFilmServiceImpl implements UserFavoriteFilmService {
         this.filmMapper = filmMapper;
     }
 
-
     @Override
     public List<FilmDto> getAllFavoriteFilms(long userId) throws UserNotFoundException {
         User user = findUserById(userId);

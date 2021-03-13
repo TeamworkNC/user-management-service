@@ -40,9 +40,7 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Override
     public AchievementDto getAchievement(long achievementId) throws AchievementNotFoundException {
-        Achievement achievement = achievementRepository.
-                findById(achievementId)
-                .orElseThrow(AchievementNotFoundException::new);
+        Achievement achievement = findAchievementById(achievementId);
 
         return achievementMapper.mapToDto(achievement);
     }
@@ -56,12 +54,16 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Override
     public void updateAchievement(long achievementId, UpdateAchievementDto updateAchievementDto) throws AchievementNotFoundException {
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        Achievement achievement = findAchievementById(achievementId);
         achievementMapper.updateEntity(achievement, updateAchievementDto);
     }
 
     @Override
     public void deleteAchievement(long achievementId) {
         achievementRepository.deleteById(achievementId);
+    }
+
+    private Achievement findAchievementById(long achievementId) throws AchievementNotFoundException {
+        return achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
     }
 }

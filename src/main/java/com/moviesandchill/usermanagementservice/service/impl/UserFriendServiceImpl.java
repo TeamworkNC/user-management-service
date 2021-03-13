@@ -28,28 +28,32 @@ public class UserFriendServiceImpl implements UserFriendService {
 
     @Override
     public List<UserDto> getAllFriends(long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
         List<User> friends = new ArrayList<>(user.getFriends());
         return userMapper.mapToDto(friends);
     }
 
     @Override
     public void addFriend(long userId, long friendId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
+        User friend = findUserById(friendId);
         user.getFriends().add(friend);
     }
 
     @Override
     public void deleteAllFriends(long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
         user.getFriends().clear();
     }
 
     @Override
     public void deleteFriend(long userId, long friendId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        User friend = userRepository.findById(friendId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
+        User friend = findUserById(friendId);
         user.getFriends().remove(friend);
+    }
+
+    private User findUserById(long userId) throws UserNotFoundException {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 }

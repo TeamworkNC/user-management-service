@@ -9,7 +9,6 @@ import com.moviesandchill.usermanagementservice.mapper.AchievementMapper;
 import com.moviesandchill.usermanagementservice.repository.AchievementRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
 import com.moviesandchill.usermanagementservice.service.UserAchievementService;
-import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +21,11 @@ import java.util.List;
 @Slf4j
 public class UserAchievementServiceImpl implements UserAchievementService {
 
-    private final UserService userService;
     private final AchievementRepository achievementRepository;
     private final UserRepository userRepository;
     private final AchievementMapper achievementMapper;
 
-    public UserAchievementServiceImpl(UserService userService, AchievementRepository achievementRepository, UserRepository userRepository, AchievementMapper achievementMapper) {
-        this.userService = userService;
+    public UserAchievementServiceImpl(AchievementRepository achievementRepository, UserRepository userRepository, AchievementMapper achievementMapper) {
         this.achievementRepository = achievementRepository;
         this.userRepository = userRepository;
         this.achievementMapper = achievementMapper;
@@ -36,28 +33,36 @@ public class UserAchievementServiceImpl implements UserAchievementService {
 
     @Override
     public List<AchievementDto> getAllAchievements(long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
         List<Achievement> achievements = new ArrayList<>(user.getAchievements());
         return achievementMapper.mapToDto(achievements);
     }
 
     @Override
     public void addAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        User user = findUserById(userId);
+        Achievement achievement = findAchievementById(achievementId);
         user.getAchievements().add(achievement);
     }
 
     @Override
     public void deleteAllAchievements(long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = findUserById(userId);
         user.getAchievements().clear();
     }
 
     @Override
     public void deleteAchievement(long userId, long achievementId) throws AchievementNotFoundException, UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        User user = findUserById(userId);
+        Achievement achievement = findAchievementById(achievementId);
         user.getAchievements().remove(achievement);
+    }
+
+    private User findUserById(long userId) throws UserNotFoundException {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    }
+
+    private Achievement findAchievementById(long achievementId) throws AchievementNotFoundException {
+        return achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
     }
 }

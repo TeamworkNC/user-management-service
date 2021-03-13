@@ -54,12 +54,6 @@ public class UserWantWatchFilmServiceImpl implements UserWantWatchFilmService {
     public void deleteWantWatchFilm(long userId, long filmId) throws UserNotFoundException, FilmNotFoundException {
         User user = findUserById(userId);
         Film film = findFilmById(filmId);
-
-        var films = user.getWantWatchFilms();
-
-        if (!films.contains(film)) {
-            throw new FilmNotFoundException(filmId);
-        }
         user.getWantWatchFilms().remove(film);
     }
 
