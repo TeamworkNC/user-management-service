@@ -17,11 +17,11 @@ import java.util.List;
         produces = "application/json"
 )
 @Slf4j
-public class UsersController {
+public class UserController {
 
     private final UserService userService;
 
-    public UsersController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 

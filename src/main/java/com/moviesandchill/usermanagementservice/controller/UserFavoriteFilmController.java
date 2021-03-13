@@ -16,12 +16,12 @@ import java.util.List;
         produces = "application/json"
 )
 @Slf4j
-public class UserFavoriteFilmsController {
+public class UserFavoriteFilmController {
 
     private final UserFavoriteFilmService userFavoriteFilmService;
 
 
-    public UserFavoriteFilmsController(UserFavoriteFilmService userFavoriteFilmService) {
+    public UserFavoriteFilmController(UserFavoriteFilmService userFavoriteFilmService) {
         this.userFavoriteFilmService = userFavoriteFilmService;
     }
 
