@@ -17,6 +17,8 @@ import java.util.List;
 public interface FilmMapper {
     Film mapToEntity(NewFilmDto dto);
 
+    Film mapToEntity(Long filmId);
+
     List<FilmDto> mapToDto(List<Film> entities);
 
     FilmDto mapToDto(Film entity);

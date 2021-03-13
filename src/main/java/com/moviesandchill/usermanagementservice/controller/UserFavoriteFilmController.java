@@ -1,7 +1,6 @@
 package com.moviesandchill.usermanagementservice.controller;
 
 import com.moviesandchill.usermanagementservice.dto.film.FilmDto;
-import com.moviesandchill.usermanagementservice.dto.film.NewFilmDto;
 import com.moviesandchill.usermanagementservice.exception.film.FilmNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.service.UserFavoriteFilmService;
@@ -31,8 +30,8 @@ public class UserFavoriteFilmController {
     }
 
     @PostMapping
-    void addFavoriteFilm(@PathVariable long userId, @RequestBody NewFilmDto newFilmDto) throws UserNotFoundException {
-        userFavoriteFilmService.addFavoriteFilm(userId, newFilmDto);
+    void addFavoriteFilm(@PathVariable long userId, @RequestBody long filmId) throws UserNotFoundException {
+        userFavoriteFilmService.addFavoriteFilm(userId, filmId);
     }
 
     @DeleteMapping

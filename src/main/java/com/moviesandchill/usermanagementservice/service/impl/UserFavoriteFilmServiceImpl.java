@@ -1,7 +1,6 @@
 package com.moviesandchill.usermanagementservice.service.impl;
 
 import com.moviesandchill.usermanagementservice.dto.film.FilmDto;
-import com.moviesandchill.usermanagementservice.dto.film.NewFilmDto;
 import com.moviesandchill.usermanagementservice.entity.Film;
 import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.exception.film.FilmNotFoundException;
@@ -41,9 +40,9 @@ public class UserFavoriteFilmServiceImpl implements UserFavoriteFilmService {
     }
 
     @Override
-    public void addFavoriteFilm(long userId, NewFilmDto newFilmDto) throws UserNotFoundException {
+    public void addFavoriteFilm(long userId, long filmId) throws UserNotFoundException {
         User user = findUserById(userId);
-        Film film = filmMapper.mapToEntity(newFilmDto);
+        Film film = filmMapper.mapToEntity(filmId);
         film = filmRepository.save(film);
         user.getFavoriteFilms().add(film);
     }
