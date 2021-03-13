@@ -73,4 +73,13 @@ public class User {
     @ToString.Exclude
     private Set<Film> wantWatchFilms;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_wanted_films",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Film> watchedFilms;
+
 }
