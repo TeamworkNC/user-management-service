@@ -2,6 +2,7 @@ package com.moviesandchill.usermanagementservice.service.impl;
 
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
+import com.moviesandchill.usermanagementservice.dto.achievement.UpdateAchievementDto;
 import com.moviesandchill.usermanagementservice.entity.Achievement;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.AchievementMapper;
@@ -38,10 +39,8 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
     @Override
-    public AchievementDto getAchievementById(long achievementId) throws AchievementNotFoundException {
-        Achievement achievement = achievementRepository.
-                findById(achievementId)
-                .orElseThrow(AchievementNotFoundException::new);
+    public AchievementDto getAchievement(long achievementId) throws AchievementNotFoundException {
+        Achievement achievement = findAchievementById(achievementId);
 
         return achievementMapper.mapToDto(achievement);
     }
@@ -54,7 +53,17 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
     @Override
+    public void updateAchievement(long achievementId, UpdateAchievementDto updateAchievementDto) throws AchievementNotFoundException {
+        Achievement achievement = findAchievementById(achievementId);
+        achievementMapper.updateEntity(achievement, updateAchievementDto);
+    }
+
+    @Override
     public void deleteAchievement(long achievementId) {
         achievementRepository.deleteById(achievementId);
+    }
+
+    private Achievement findAchievementById(long achievementId) throws AchievementNotFoundException {
+        return achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
     }
 }

@@ -1,4 +1,4 @@
-package com.moviesandchill.usermanagementservice.dto.login;
+package com.moviesandchill.usermanagementservice.dto.staff;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginRequestDto {
-    private String login;
-
-    private String password;
+public class StaffDto {
+    private Long staffId;
 }

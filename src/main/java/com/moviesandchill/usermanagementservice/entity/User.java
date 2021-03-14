@@ -18,7 +18,11 @@ public class User {
     private Long userId;
 
     @Column(unique = true)
-    private String name;
+    private String login;
+
+    private String firstName;
+
+    private String lastName;
 
     private LocalDate birthday;
 
@@ -50,4 +54,41 @@ public class User {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Achievement> achievements;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_films",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Film> favoriteFilms;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_want_watch_films",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Film> wantWatchFilms;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_wanted_films",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Film> watchedFilms;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_staffs",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "staff_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Staff> favoriteStaffs;
+
 }

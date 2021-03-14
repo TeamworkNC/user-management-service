@@ -12,7 +12,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class UpdateUserDto {
-    private String name;
+    private String login;
+
+    private String firstName;
+
+    private String lastName;
 
     private LocalDate birthday;
 
