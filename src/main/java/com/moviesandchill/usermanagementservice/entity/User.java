@@ -91,4 +91,13 @@ public class User {
     @ToString.Exclude
     private Set<Staff> favoriteStaffs;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_global_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "global_role_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<GlobalRole> globalRoles;
+
 }
