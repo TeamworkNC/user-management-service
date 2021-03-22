@@ -7,11 +7,11 @@ import com.moviesandchill.usermanagementservice.dto.user.UpdateUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
-import com.moviesandchill.usermanagementservice.exception.globalrole.GlobalRoleNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.GlobalRoleRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
+import com.moviesandchill.usermanagementservice.service.UserGlobalRoleService;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,12 +27,14 @@ import java.util.Set;
 @Slf4j
 public class UserServiceImpl implements UserService {
 
+    private final UserGlobalRoleService userGlobalRoleService;
     private final UserRepository userRepository;
     private final GlobalRoleRepository globalRoleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, GlobalRoleRepository globalRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserGlobalRoleService userGlobalRoleService, UserRepository userRepository, GlobalRoleRepository globalRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+        this.userGlobalRoleService = userGlobalRoleService;
         this.userRepository = userRepository;
         this.globalRoleRepository = globalRoleRepository;
         this.userMapper = userMapper;
@@ -120,16 +122,16 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDto register(NewUserDto newUserDto) throws GlobalRoleNotFoundException {
-        var user = userMapper.mapToEntity(newUserDto);
-        user = userRepository.save(user);
+    public UserDto register(NewUserDto newUserDto) {
+        UserDto userDto = addUser(newUserDto);
+        User user = userRepository.findById(userDto.getUserId())
+                .orElseThrow(IllegalStateException::new);
 
         var userRole = globalRoleRepository
                 .findByName("USER")
-                .orElseThrow(GlobalRoleNotFoundException::new);
+                .orElseThrow(IllegalStateException::new);
 
         user.setGlobalRoles(Set.of(userRole));
-
         return userMapper.mapToDto(user);
     }
 

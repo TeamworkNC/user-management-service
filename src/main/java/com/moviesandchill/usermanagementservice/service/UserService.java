@@ -5,7 +5,6 @@ import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UpdateUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
-import com.moviesandchill.usermanagementservice.exception.globalrole.GlobalRoleNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 
 import java.util.List;
@@ -28,5 +27,5 @@ public interface UserService {
 
     Optional<UserDto> login(LoginRequestDto loginRequestDto);
 
-    UserDto register(NewUserDto user) throws GlobalRoleNotFoundException;
+    UserDto register(NewUserDto user);
 }

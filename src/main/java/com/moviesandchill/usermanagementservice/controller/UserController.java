@@ -4,7 +4,6 @@ import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
-import com.moviesandchill.usermanagementservice.exception.globalrole.GlobalRoleNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody NewUserDto newUserDto) throws GlobalRoleNotFoundException {
+    public UserDto register(@RequestBody NewUserDto newUserDto) {
         return userService.register(newUserDto);
     }
 }
