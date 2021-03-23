@@ -9,25 +9,34 @@ import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
+import com.moviesandchill.usermanagementservice.repository.GlobalRoleRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
+import com.moviesandchill.usermanagementservice.service.UserGlobalRoleService;
 import com.moviesandchill.usermanagementservice.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
+@Slf4j
 public class UserServiceImpl implements UserService {
 
+    private final UserGlobalRoleService userGlobalRoleService;
     private final UserRepository userRepository;
+    private final GlobalRoleRepository globalRoleRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserGlobalRoleService userGlobalRoleService, UserRepository userRepository, GlobalRoleRepository globalRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+        this.userGlobalRoleService = userGlobalRoleService;
         this.userRepository = userRepository;
+        this.globalRoleRepository = globalRoleRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
     }
@@ -109,6 +118,21 @@ public class UserServiceImpl implements UserService {
             return Optional.of(dto);
         }
         return Optional.empty();
+    }
+
+
+    @Override
+    public UserDto register(NewUserDto newUserDto) {
+        UserDto userDto = addUser(newUserDto);
+        User user = userRepository.findById(userDto.getUserId())
+                .orElseThrow(IllegalStateException::new);
+
+        var userRole = globalRoleRepository
+                .findByName("USER")
+                .orElseThrow(IllegalStateException::new);
+
+        user.setGlobalRoles(Set.of(userRole));
+        return userMapper.mapToDto(user);
     }
 
     private User findUserById(long userId) throws UserNotFoundException {

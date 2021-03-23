@@ -51,7 +51,6 @@ public class UserController {
     }
 
 
-
     @PutMapping("/{userId}/password")
     public boolean updateUserPassword(@PathVariable long userId, @RequestBody UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
         return userService.updateUserPassword(userId, updatePasswordDto);
@@ -60,5 +59,10 @@ public class UserController {
     @PostMapping("/login")
     public UserDto login(@RequestBody LoginRequestDto loginRequestDto) {
         return userService.login(loginRequestDto).orElseThrow();
+    }
+
+    @PostMapping("/register")
+    public UserDto register(@RequestBody NewUserDto newUserDto) {
+        return userService.register(newUserDto);
     }
 }

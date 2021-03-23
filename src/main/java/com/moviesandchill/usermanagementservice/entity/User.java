@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -44,7 +45,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "friend_id"))
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<User> friends;
+    private Set<User> friends = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -53,7 +54,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "achievement_id"))
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Achievement> achievements;
+    private Set<Achievement> achievements = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -71,7 +72,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "film_id"))
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Film> wantWatchFilms;
+    private Set<Film> wantWatchFilms = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -80,7 +81,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "film_id"))
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Film> watchedFilms;
+    private Set<Film> watchedFilms = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -89,7 +90,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "staff_id"))
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Staff> favoriteStaffs;
+    private Set<Staff> favoriteStaffs = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -98,6 +99,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "global_role_id"))
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<GlobalRole> globalRoles;
+    private Set<GlobalRole> globalRoles = new HashSet<>();
 
 }

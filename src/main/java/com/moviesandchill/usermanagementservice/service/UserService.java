@@ -27,4 +27,5 @@ public interface UserService {
 
     Optional<UserDto> login(LoginRequestDto loginRequestDto);
 
+    UserDto register(NewUserDto user);
 }
