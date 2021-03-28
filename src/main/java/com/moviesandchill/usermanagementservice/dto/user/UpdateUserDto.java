@@ -14,6 +14,8 @@ import java.time.LocalDate;
 public class UpdateUserDto {
     private String login;
 
+    private String email;
+
     private String firstName;
 
     private String lastName;
