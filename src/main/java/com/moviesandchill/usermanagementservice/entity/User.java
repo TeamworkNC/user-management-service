@@ -18,11 +18,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String login;
 
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
 
     private LocalDate birthday;
@@ -31,6 +36,7 @@ public class User {
 
     private String description;
 
+    @Column(nullable = false)
     private LocalDate registrationDate = LocalDate.now();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
