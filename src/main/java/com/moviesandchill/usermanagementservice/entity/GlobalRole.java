@@ -18,6 +18,6 @@ public class GlobalRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long globalRoleId;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 }

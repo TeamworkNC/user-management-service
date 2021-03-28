@@ -18,6 +18,7 @@ public class Achievement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long achievementId;
 
+    @Column(nullable = false)
     private String name;
 
     private String logoUrl;
