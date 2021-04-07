@@ -18,11 +18,11 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
-public class GlobalRoleControllerImpl implements GlobalRoleService {
+public class GlobalRoleServiceImpl implements GlobalRoleService {
     private final GlobalRoleRepository globalRoleRepository;
     private final GlobalRoleMapper globalRoleMapper;
 
-    public GlobalRoleControllerImpl(GlobalRoleRepository globalRoleRepository, GlobalRoleMapper globalRoleMapper) {
+    public GlobalRoleServiceImpl(GlobalRoleRepository globalRoleRepository, GlobalRoleMapper globalRoleMapper) {
         this.globalRoleRepository = globalRoleRepository;
         this.globalRoleMapper = globalRoleMapper;
     }

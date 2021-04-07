@@ -24,10 +24,6 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    private String firstName;
-
-    private String lastName;
-
     private LocalDate birthday;
 
     private String logoUrl;
