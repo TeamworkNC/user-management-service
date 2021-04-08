@@ -26,9 +26,9 @@ public class User {
 
     private LocalDate birthday;
 
-    private String logoUrl;
+    private String logoUrl = "";
 
-    private String description;
+    private String description = "";
 
     @Column(nullable = false)
     private LocalDate registrationDate = LocalDate.now();
