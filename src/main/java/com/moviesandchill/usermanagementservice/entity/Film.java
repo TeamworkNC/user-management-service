@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Film {
+public class  Film {
     @Id
     private Long filmId;
 }
