@@ -7,22 +7,21 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 @Entity
-@Table(name = "mess_request")
+@Table(name = "friend_request_info")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MessRequest {
-
+public class FriendRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long messRequestId;
+    private Long friendRequestId;
 
-    @Column(unique = true, nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_user")
-    private User friend;
+    @Column(nullable = false)
+    private long recipientId;
 }

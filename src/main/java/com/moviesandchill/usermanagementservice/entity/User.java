@@ -4,9 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,10 +47,14 @@ public class User {
     @ToString.Exclude
     private Set<User> friends = new HashSet<>();
 
-    @OneToMany(mappedBy = "friend ")
+    @ManyToMany
+    @JoinTable(
+            name = "user_friend_requests",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_request_id"))
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<MessRequest> messRequestList = new HashSet<>();
+    private Set<FriendRequest> friendRequests = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
