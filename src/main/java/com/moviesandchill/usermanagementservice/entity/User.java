@@ -49,6 +49,15 @@ public class User {
 
     @ManyToMany
     @JoinTable(
+            name = "user_friend_requests",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_request_id"))
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<FriendRequest> friendRequests = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
             name = "user_achievements",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "achievement_id"))
