@@ -57,10 +57,12 @@ public class UserFavoriteStaffService {
     }
 
     private User findUserById(long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     private Staff findStaffById(long staffId) throws StaffNotFoundException {
-        return staffRepository.findById(staffId).orElseThrow(StaffNotFoundException::new);
+        return staffRepository.findById(staffId)
+                .orElseThrow(() -> new StaffNotFoundException(staffId));
     }
 }

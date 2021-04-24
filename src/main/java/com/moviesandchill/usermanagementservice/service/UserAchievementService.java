@@ -55,10 +55,12 @@ public class UserAchievementService {
     }
 
     private User findUserById(long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     private Achievement findAchievementById(long achievementId) throws AchievementNotFoundException {
-        return achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        return achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new AchievementNotFoundException(achievementId));
     }
 }

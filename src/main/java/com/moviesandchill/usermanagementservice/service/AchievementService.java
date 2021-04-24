@@ -57,6 +57,7 @@ public class AchievementService {
     }
 
     private Achievement findAchievementById(long achievementId) throws AchievementNotFoundException {
-        return achievementRepository.findById(achievementId).orElseThrow(AchievementNotFoundException::new);
+        return achievementRepository.findById(achievementId)
+                .orElseThrow(() -> new AchievementNotFoundException(achievementId));
     }
 }
