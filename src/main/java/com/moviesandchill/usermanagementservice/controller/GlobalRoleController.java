@@ -4,7 +4,7 @@ import com.moviesandchill.usermanagementservice.dto.globalrole.GlobalRoleDto;
 import com.moviesandchill.usermanagementservice.dto.globalrole.NewGlobalRoleDto;
 import com.moviesandchill.usermanagementservice.dto.globalrole.UpdateGlobalRoleDto;
 import com.moviesandchill.usermanagementservice.exception.globalrole.GlobalRoleNotFoundException;
-import com.moviesandchill.usermanagementservice.service.GlobalRoleService;
+import com.moviesandchill.usermanagementservice.service.impl.GlobalRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

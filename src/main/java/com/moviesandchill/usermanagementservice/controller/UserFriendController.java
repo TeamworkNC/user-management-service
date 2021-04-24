@@ -2,7 +2,7 @@ package com.moviesandchill.usermanagementservice.controller;
 
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
-import com.moviesandchill.usermanagementservice.service.UserFriendService;
+import com.moviesandchill.usermanagementservice.service.impl.UserFriendService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

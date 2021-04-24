@@ -11,8 +11,6 @@ import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundExcep
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.GlobalRoleRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
-import com.moviesandchill.usermanagementservice.service.UserGlobalRoleService;
-import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ import java.util.Set;
 @Service
 @Transactional
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class UserService {
 
     private final UserGlobalRoleService userGlobalRoleService;
     private final UserRepository userRepository;
@@ -33,7 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserGlobalRoleService userGlobalRoleService, UserRepository userRepository, GlobalRoleRepository globalRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserGlobalRoleService userGlobalRoleService, UserRepository userRepository, GlobalRoleRepository globalRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
         this.userGlobalRoleService = userGlobalRoleService;
         this.userRepository = userRepository;
         this.globalRoleRepository = globalRoleRepository;
@@ -41,13 +39,11 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
     public List<UserDto> getAllUsers() {
         var users = userRepository.findAll();
         return userMapper.mapToDto(users);
     }
 
-    @Override
     public UserDto addUser(NewUserDto dto) {
         User user = userMapper.mapToEntity(dto);
         UserPassword userPassword = new UserPassword();
@@ -62,29 +58,24 @@ public class UserServiceImpl implements UserService {
         return userMapper.mapToDto(user);
     }
 
-    @Override
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }
 
-    @Override
     public UserDto getUser(long userId) throws UserNotFoundException {
         User user = findUserById(userId);
         return userMapper.mapToDto(user);
     }
 
-    @Override
     public void updateUser(long userId, UpdateUserDto updateUserDto) throws UserNotFoundException {
         User user = findUserById(userId);
         userMapper.updateEntity(user, updateUserDto);
     }
 
-    @Override
     public void deleteUser(long userId) {
         userRepository.deleteById(userId);
     }
 
-    @Override
     public boolean updateUserPassword(long userId, UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
         String oldPassword = updatePasswordDto.getOldPassword();
         String newPassword = updatePasswordDto.getNewPassword();
@@ -98,7 +89,6 @@ public class UserServiceImpl implements UserService {
         return false;
     }
 
-    @Override
     public Optional<UserDto> login(LoginRequestDto loginRequestDto) {
         String login = loginRequestDto.getLogin();
         String password = loginRequestDto.getPassword();
@@ -120,8 +110,6 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
-
-    @Override
     public UserDto register(NewUserDto newUserDto) {
         UserDto userDto = addUser(newUserDto);
         User user = userRepository.findById(userDto.getUserId())

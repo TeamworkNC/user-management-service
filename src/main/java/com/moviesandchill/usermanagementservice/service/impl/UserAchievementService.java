@@ -8,7 +8,6 @@ import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundExcep
 import com.moviesandchill.usermanagementservice.mapper.AchievementMapper;
 import com.moviesandchill.usermanagementservice.repository.AchievementRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
-import com.moviesandchill.usermanagementservice.service.UserAchievementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,39 +18,36 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
-public class UserAchievementServiceImpl implements UserAchievementService {
+public class UserAchievementService {
 
     private final AchievementRepository achievementRepository;
     private final UserRepository userRepository;
     private final AchievementMapper achievementMapper;
 
-    public UserAchievementServiceImpl(AchievementRepository achievementRepository, UserRepository userRepository, AchievementMapper achievementMapper) {
+    public UserAchievementService(AchievementRepository achievementRepository, UserRepository userRepository, AchievementMapper achievementMapper) {
         this.achievementRepository = achievementRepository;
         this.userRepository = userRepository;
         this.achievementMapper = achievementMapper;
     }
 
-    @Override
+
     public List<AchievementDto> getAllAchievements(long userId) throws UserNotFoundException {
         User user = findUserById(userId);
         List<Achievement> achievements = new ArrayList<>(user.getAchievements());
         return achievementMapper.mapToDto(achievements);
     }
 
-    @Override
     public void addAchievement(long userId, long achievementId) throws UserNotFoundException, AchievementNotFoundException {
         User user = findUserById(userId);
         Achievement achievement = findAchievementById(achievementId);
         user.getAchievements().add(achievement);
     }
 
-    @Override
     public void deleteAllAchievements(long userId) throws UserNotFoundException {
         User user = findUserById(userId);
         user.getAchievements().clear();
     }
 
-    @Override
     public void deleteAchievement(long userId, long achievementId) throws AchievementNotFoundException, UserNotFoundException {
         User user = findUserById(userId);
         Achievement achievement = findAchievementById(achievementId);

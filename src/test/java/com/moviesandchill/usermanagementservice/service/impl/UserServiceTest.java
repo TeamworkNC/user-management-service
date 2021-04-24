@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class UserServiceImplTest {
+class UserServiceTest {
 
     @AfterEach
     public void destruct() {

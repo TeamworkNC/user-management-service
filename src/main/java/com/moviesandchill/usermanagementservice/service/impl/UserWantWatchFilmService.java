@@ -8,7 +8,6 @@ import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundExcep
 import com.moviesandchill.usermanagementservice.mapper.FilmMapper;
 import com.moviesandchill.usermanagementservice.repository.FilmRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
-import com.moviesandchill.usermanagementservice.service.UserWatchedFilmService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,44 +16,42 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserWatchedFilmServiceImpl implements UserWatchedFilmService {
+public class UserWantWatchFilmService {
 
     private final UserRepository userRepository;
     private final FilmRepository filmRepository;
     private final FilmMapper filmMapper;
 
-    public UserWatchedFilmServiceImpl(UserRepository userRepository, FilmRepository filmRepository, FilmMapper filmMapper) {
+    public UserWantWatchFilmService(UserRepository userRepository, FilmRepository filmRepository, FilmMapper filmMapper) {
         this.userRepository = userRepository;
         this.filmRepository = filmRepository;
         this.filmMapper = filmMapper;
     }
 
-    @Override
-    public List<FilmDto> getAllWatchedFilms(long userId) throws UserNotFoundException {
+
+    public List<FilmDto> getAllWantWatchFilms(long userId) throws UserNotFoundException {
         User user = findUserById(userId);
-        var films = new ArrayList<>(user.getWatchedFilms());
+        var films = new ArrayList<>(user.getWantWatchFilms());
         return filmMapper.mapToDto(films);
     }
 
-    @Override
-    public void addWatchedFilm(long userId, long filmId) throws UserNotFoundException {
+    public void addWantWatchFilm(long userId, long filmId) throws UserNotFoundException {
         User user = findUserById(userId);
         Film film = filmMapper.mapToEntity(filmId);
-        filmRepository.save(film);
-        user.getWatchedFilms().add(film);
+        film = filmRepository.save(film);
+        user.getWantWatchFilms().add(film);
     }
 
-    @Override
-    public void deleteAllWatchedFilms(long userId) throws UserNotFoundException {
+
+    public void deleteAllWantWatchFilms(long userId) throws UserNotFoundException {
         User user = findUserById(userId);
-        user.getWatchedFilms().clear();
+        user.getWantWatchFilms().clear();
     }
 
-    @Override
-    public void deleteWatchedFilm(long userId, long filmId) throws UserNotFoundException, FilmNotFoundException {
+    public void deleteWantWatchFilm(long userId, long filmId) throws UserNotFoundException, FilmNotFoundException {
         User user = findUserById(userId);
         Film film = findFilmById(filmId);
-        user.getWatchedFilms().remove(film);
+        user.getWantWatchFilms().remove(film);
     }
 
     private User findUserById(long userId) throws UserNotFoundException {

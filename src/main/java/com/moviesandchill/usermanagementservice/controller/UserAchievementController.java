@@ -3,7 +3,7 @@ package com.moviesandchill.usermanagementservice.controller;
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
-import com.moviesandchill.usermanagementservice.service.UserAchievementService;
+import com.moviesandchill.usermanagementservice.service.impl.UserAchievementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

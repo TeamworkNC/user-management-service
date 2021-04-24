@@ -5,7 +5,7 @@ import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
-import com.moviesandchill.usermanagementservice.service.UserService;
+import com.moviesandchill.usermanagementservice.service.impl.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

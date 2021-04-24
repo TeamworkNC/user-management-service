@@ -3,7 +3,7 @@ package com.moviesandchill.usermanagementservice.controller;
 import com.moviesandchill.usermanagementservice.dto.globalrole.GlobalRoleDto;
 import com.moviesandchill.usermanagementservice.exception.globalrole.GlobalRoleNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
-import com.moviesandchill.usermanagementservice.service.UserGlobalRoleService;
+import com.moviesandchill.usermanagementservice.service.impl.UserGlobalRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

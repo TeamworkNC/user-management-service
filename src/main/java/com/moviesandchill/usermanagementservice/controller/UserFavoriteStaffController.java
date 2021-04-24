@@ -3,7 +3,7 @@ package com.moviesandchill.usermanagementservice.controller;
 import com.moviesandchill.usermanagementservice.dto.staff.StaffDto;
 import com.moviesandchill.usermanagementservice.exception.staff.StaffNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
-import com.moviesandchill.usermanagementservice.service.UserFavoriteStaffService;
+import com.moviesandchill.usermanagementservice.service.impl.UserFavoriteStaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

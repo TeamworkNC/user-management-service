@@ -3,7 +3,6 @@ package com.moviesandchill.usermanagementservice.service.impl;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.UpdateAchievementDto;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
-import com.moviesandchill.usermanagementservice.service.AchievementService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -14,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class AchievementServiceImplTest {
+class AchievementServiceTest {
 
     @Autowired
     private AchievementService achievementService;
