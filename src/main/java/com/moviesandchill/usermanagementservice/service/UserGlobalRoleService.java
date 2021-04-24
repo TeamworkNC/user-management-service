@@ -54,10 +54,12 @@ public class UserGlobalRoleService {
     }
 
     private User findUserById(long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     private GlobalRole findGlobalRoleById(long globalRoleId) throws GlobalRoleNotFoundException {
-        return globalRoleRepository.findById(globalRoleId).orElseThrow(GlobalRoleNotFoundException::new);
+        return globalRoleRepository.findById(globalRoleId)
+                .orElseThrow(() -> new GlobalRoleNotFoundException(globalRoleId));
     }
 }

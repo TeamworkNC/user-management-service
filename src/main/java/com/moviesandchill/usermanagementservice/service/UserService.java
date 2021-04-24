@@ -124,6 +124,7 @@ public class UserService {
     }
 
     private User findUserById(long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }

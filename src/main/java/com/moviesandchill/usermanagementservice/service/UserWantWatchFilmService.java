@@ -55,10 +55,12 @@ public class UserWantWatchFilmService {
     }
 
     private User findUserById(long userId) throws UserNotFoundException {
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     private Film findFilmById(long filmId) throws FilmNotFoundException {
-        return filmRepository.findById(filmId).orElseThrow(FilmNotFoundException::new);
+        return filmRepository.findById(filmId).
+                orElseThrow(() -> new FilmNotFoundException(filmId));
     }
 }

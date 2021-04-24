@@ -62,6 +62,7 @@ public class GlobalRoleService {
     }
 
     private GlobalRole findGlobalRoleById(long globalRoleId) throws GlobalRoleNotFoundException {
-        return globalRoleRepository.findById(globalRoleId).orElseThrow(GlobalRoleNotFoundException::new);
+        return globalRoleRepository.findById(globalRoleId)
+                .orElseThrow(() -> new GlobalRoleNotFoundException(globalRoleId));
     }
 }
