@@ -3,6 +3,7 @@ package com.moviesandchill.usermanagementservice.controller;
 import com.moviesandchill.usermanagementservice.dto.login.LoginRequestDto;
 import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
+import com.moviesandchill.usermanagementservice.dto.user.UpdateUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.service.UserService;
@@ -30,19 +31,24 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @PostMapping
+    public UserDto addUser(@RequestBody NewUserDto newUserDto) {
+        return userService.addUser(newUserDto);
+    }
+
     @DeleteMapping
     public void deleteAllUsers() {
         userService.deleteAllUsers();
     }
 
     @GetMapping("/{userId}")
-    public UserDto getUserById(@PathVariable long userId) throws UserNotFoundException {
+    public UserDto getUser(@PathVariable long userId) throws UserNotFoundException {
         return userService.getUser(userId);
     }
 
-    @PostMapping
-    public UserDto addUser(@RequestBody NewUserDto newUserDto) {
-        return userService.addUser(newUserDto);
+    @PutMapping("/{userId}")
+    public void updateUser(@PathVariable long userId, @RequestBody UpdateUserDto updateUserDto) throws UserNotFoundException {
+        userService.updateUser(userId, updateUserDto);
     }
 
     @DeleteMapping("/{userId}")
