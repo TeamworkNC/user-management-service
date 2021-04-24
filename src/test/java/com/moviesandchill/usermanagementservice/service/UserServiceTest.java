@@ -1,4 +1,4 @@
-package com.moviesandchill.usermanagementservice.service.impl;
+package com.moviesandchill.usermanagementservice.service;
 
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;

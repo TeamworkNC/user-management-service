@@ -1,4 +1,4 @@
-package com.moviesandchill.usermanagementservice.service.impl;
+package com.moviesandchill.usermanagementservice.service;
 
 import com.moviesandchill.usermanagementservice.dto.globalrole.GlobalRoleDto;
 import com.moviesandchill.usermanagementservice.entity.GlobalRole;

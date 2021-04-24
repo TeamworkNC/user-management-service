@@ -4,7 +4,7 @@ import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.UpdateAchievementDto;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
-import com.moviesandchill.usermanagementservice.service.impl.AchievementService;
+import com.moviesandchill.usermanagementservice.service.AchievementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +50,7 @@ public class AchievementController {
     }
 
     @DeleteMapping("/{achievementId}")
-    private void deleteAchievement(@PathVariable long achievementId) throws AchievementNotFoundException {
+    private void deleteAchievement(@PathVariable long achievementId) {
         achievementService.deleteAchievement(achievementId);
     }
 }
