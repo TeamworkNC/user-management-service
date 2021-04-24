@@ -7,7 +7,6 @@ import com.moviesandchill.usermanagementservice.entity.GlobalRole;
 import com.moviesandchill.usermanagementservice.exception.globalrole.GlobalRoleNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.GlobalRoleMapper;
 import com.moviesandchill.usermanagementservice.repository.GlobalRoleRepository;
-import com.moviesandchill.usermanagementservice.service.GlobalRoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,46 +17,46 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
-public class GlobalRoleServiceImpl implements GlobalRoleService {
+public class GlobalRoleService {
     private final GlobalRoleRepository globalRoleRepository;
     private final GlobalRoleMapper globalRoleMapper;
 
-    public GlobalRoleServiceImpl(GlobalRoleRepository globalRoleRepository, GlobalRoleMapper globalRoleMapper) {
+    public GlobalRoleService(GlobalRoleRepository globalRoleRepository, GlobalRoleMapper globalRoleMapper) {
         this.globalRoleRepository = globalRoleRepository;
         this.globalRoleMapper = globalRoleMapper;
     }
 
-    @Override
+
     public List<GlobalRoleDto> getAllGlobalRoles() {
         var globalRoles = new ArrayList<>(globalRoleRepository.findAll());
         return globalRoleMapper.mapToDto(globalRoles);
     }
 
-    @Override
+
     public GlobalRoleDto addGlobalRole(NewGlobalRoleDto newGlobalRoleDto) {
         GlobalRole globalRole = globalRoleMapper.mapToEntity(newGlobalRoleDto);
         globalRole = globalRoleRepository.save(globalRole);
         return globalRoleMapper.mapToDto(globalRole);
     }
 
-    @Override
+
     public void deleteAllGlobalRoles() {
         globalRoleRepository.deleteAll();
     }
 
-    @Override
+
     public GlobalRoleDto getGlobalRole(long globalRoleId) throws GlobalRoleNotFoundException {
         var globalRole = findGlobalRoleById(globalRoleId);
         return globalRoleMapper.mapToDto(globalRole);
     }
 
-    @Override
+
     public void updateGlobalRole(long globalRoleId, UpdateGlobalRoleDto updateUserDto) throws GlobalRoleNotFoundException {
         GlobalRole globalRole = findGlobalRoleById(globalRoleId);
         globalRoleMapper.updateEntity(globalRole, updateUserDto);
     }
 
-    @Override
+
     public void deleteGlobalRole(long globalRoleId) {
         globalRoleRepository.deleteById(globalRoleId);
     }

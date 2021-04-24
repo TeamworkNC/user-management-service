@@ -4,7 +4,6 @@ import com.moviesandchill.usermanagementservice.dto.friendrequest.FriendRequestD
 import com.moviesandchill.usermanagementservice.mapper.FriendRequestMapper;
 import com.moviesandchill.usermanagementservice.repository.FriendRequestRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
-import com.moviesandchill.usermanagementservice.service.UserFriendRequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,19 +14,17 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
-public class UserFriendRequestServiceImpl implements UserFriendRequestService {
+public class UserFriendRequestService {
 
     private FriendRequestRepository friendRequestRepository;
     private UserRepository userRepository;
     private FriendRequestMapper friendRequestMapper;
 
-    @Override
     public List<FriendRequestDto> getAllFriendRequests(long userId) {
         var friendRequests = friendRequestRepository.findAllByRecipientId(userId);
         return friendRequestMapper.mapToDto(friendRequests);
     }
 
-    @Override
     public void acceptFriendRequest(long userId, long friendRequestId) {
         var friendRequest = friendRequestRepository.findById(friendRequestId)
                 .orElseThrow();
@@ -47,7 +44,6 @@ public class UserFriendRequestServiceImpl implements UserFriendRequestService {
         friendRequestRepository.deleteAllByUserIdAndRecipientId(secondUserId, firstUserId);
     }
 
-    @Override
     public void declineFriendRequest(long userId, long friendRequestId) {
         friendRequestRepository.deleteById(friendRequestId);
     }

@@ -5,10 +5,6 @@ import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.repository.FriendRequestRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
-import com.moviesandchill.usermanagementservice.service.FriendRequestService;
-import com.moviesandchill.usermanagementservice.service.UserFriendRequestService;
-import com.moviesandchill.usermanagementservice.service.UserFriendService;
-import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-class UserFriendRequestServiceImplTest {
+class UserFriendRequestServiceTest {
     @Autowired
     private UserFriendRequestService userFriendRequestService;
     @Autowired
