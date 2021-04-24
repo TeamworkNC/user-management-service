@@ -1,4 +1,4 @@
-package com.moviesandchill.usermanagementservice.service.impl;
+package com.moviesandchill.usermanagementservice.service;
 
 import com.moviesandchill.usermanagementservice.dto.film.FilmDto;
 import com.moviesandchill.usermanagementservice.entity.Film;
@@ -8,6 +8,7 @@ import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundExcep
 import com.moviesandchill.usermanagementservice.mapper.FilmMapper;
 import com.moviesandchill.usermanagementservice.repository.FilmRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,40 +17,41 @@ import java.util.List;
 
 @Service
 @Transactional
-public class UserWatchedFilmService {
+@Slf4j
+public class UserFavoriteFilmService {
 
-    private final UserRepository userRepository;
     private final FilmRepository filmRepository;
+    private final UserRepository userRepository;
     private final FilmMapper filmMapper;
 
-    public UserWatchedFilmService(UserRepository userRepository, FilmRepository filmRepository, FilmMapper filmMapper) {
-        this.userRepository = userRepository;
+    public UserFavoriteFilmService(FilmRepository filmRepository, UserRepository userRepository, FilmMapper filmMapper) {
         this.filmRepository = filmRepository;
+        this.userRepository = userRepository;
         this.filmMapper = filmMapper;
     }
 
-    public List<FilmDto> getAllWatchedFilms(long userId) throws UserNotFoundException {
+    public List<FilmDto> getAllFavoriteFilms(long userId) throws UserNotFoundException {
         User user = findUserById(userId);
-        var films = new ArrayList<>(user.getWatchedFilms());
+        List<Film> films = new ArrayList<>(user.getFavoriteFilms());
         return filmMapper.mapToDto(films);
     }
 
-    public void addWatchedFilm(long userId, long filmId) throws UserNotFoundException {
+    public void addFavoriteFilm(long userId, long filmId) throws UserNotFoundException {
         User user = findUserById(userId);
         Film film = filmMapper.mapToEntity(filmId);
-        filmRepository.save(film);
-        user.getWatchedFilms().add(film);
+        film = filmRepository.save(film);
+        user.getFavoriteFilms().add(film);
     }
 
-    public void deleteAllWatchedFilms(long userId) throws UserNotFoundException {
+    public void deleteAllFavoriteFilms(long userId) throws UserNotFoundException {
         User user = findUserById(userId);
-        user.getWatchedFilms().clear();
+        user.getFavoriteFilms().clear();
     }
 
-    public void deleteWatchedFilm(long userId, long filmId) throws UserNotFoundException, FilmNotFoundException {
+    public void deleteFavoriteFilm(long userId, long filmId) throws UserNotFoundException, FilmNotFoundException {
         User user = findUserById(userId);
         Film film = findFilmById(filmId);
-        user.getWatchedFilms().remove(film);
+        user.getFavoriteFilms().remove(film);
     }
 
     private User findUserById(long userId) throws UserNotFoundException {

@@ -1,4 +1,4 @@
-package com.moviesandchill.usermanagementservice.service.impl;
+package com.moviesandchill.usermanagementservice.service;
 
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;

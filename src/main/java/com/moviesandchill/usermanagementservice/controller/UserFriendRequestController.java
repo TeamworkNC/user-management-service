@@ -1,7 +1,7 @@
 package com.moviesandchill.usermanagementservice.controller;
 
 import com.moviesandchill.usermanagementservice.dto.friendrequest.FriendRequestDto;
-import com.moviesandchill.usermanagementservice.service.impl.UserFriendRequestService;
+import com.moviesandchill.usermanagementservice.service.UserFriendRequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 

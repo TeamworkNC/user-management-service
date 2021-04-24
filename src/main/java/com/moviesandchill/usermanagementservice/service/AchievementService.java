@@ -1,4 +1,4 @@
-package com.moviesandchill.usermanagementservice.service.impl;
+package com.moviesandchill.usermanagementservice.service;
 
 import com.moviesandchill.usermanagementservice.dto.achievement.AchievementDto;
 import com.moviesandchill.usermanagementservice.dto.achievement.NewAchievementDto;
