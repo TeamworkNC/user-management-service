@@ -106,7 +106,6 @@ public class UserService {
 
         String url = filmServiceUrl + "video/" + userId + "/logo";
 
-        RestTemplate restTemplate = new RestTemplate();
         String logoUrl = restTemplate
                 .postForObject(url, requestEntity, String.class);
 
