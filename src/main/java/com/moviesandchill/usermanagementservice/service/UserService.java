@@ -12,8 +12,17 @@ import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.GlobalRoleRepository;
 import com.moviesandchill.usermanagementservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -25,19 +34,12 @@ import java.util.Set;
 @Slf4j
 public class UserService {
 
-    private final UserGlobalRoleService userGlobalRoleService;
-    private final UserRepository userRepository;
-    private final GlobalRoleRepository globalRoleRepository;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserGlobalRoleService userGlobalRoleService, UserRepository userRepository, GlobalRoleRepository globalRoleRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
-        this.userGlobalRoleService = userGlobalRoleService;
-        this.userRepository = userRepository;
-        this.globalRoleRepository = globalRoleRepository;
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private UserRepository userRepository;
+    private GlobalRoleRepository globalRoleRepository;
+    private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder;
+    private RestTemplate restTemplate;
+    private String filmServiceUrl;
 
     public List<UserDto> getAllUsers() {
         var users = userRepository.findAll();
@@ -89,6 +91,28 @@ public class UserService {
         return false;
     }
 
+    public void updateUserLogo(long userId, MultipartFile file) throws UserNotFoundException {
+        User user = findUserById(userId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        MultiValueMap<String, Object> body
+                = new LinkedMultiValueMap<>();
+        body.add("file", file.getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity
+                = new HttpEntity<>(body, headers);
+
+        String url = filmServiceUrl + "video/" + userId + "/logo";
+
+        RestTemplate restTemplate = new RestTemplate();
+        String logoUrl = restTemplate
+                .postForObject(url, requestEntity, String.class);
+
+        user.setLogoUrl(logoUrl);
+    }
+
     public Optional<UserDto> login(LoginRequestDto loginRequestDto) {
         String login = loginRequestDto.getLogin();
         String password = loginRequestDto.getPassword();
@@ -126,5 +150,35 @@ public class UserService {
     private User findUserById(long userId) throws UserNotFoundException {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    @Autowired
+    public void setFilmServiceUrl(@Value("${endpoint.film-service.url}") String filmServiceUrl) {
+        this.filmServiceUrl = filmServiceUrl;
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setGlobalRoleRepository(GlobalRoleRepository globalRoleRepository) {
+        this.globalRoleRepository = globalRoleRepository;
+    }
+
+    @Autowired
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Autowired
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 }
