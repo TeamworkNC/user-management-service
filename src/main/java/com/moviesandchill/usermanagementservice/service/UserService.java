@@ -39,7 +39,7 @@ public class UserService {
     private UserMapper userMapper;
     private PasswordEncoder passwordEncoder;
     private RestTemplate restTemplate;
-    private String filmServiceUrl;
+    private String streamingServiceUrl;
 
     public List<UserDto> getAllUsers() {
         var users = userRepository.findAll();
@@ -104,7 +104,7 @@ public class UserService {
         HttpEntity<MultiValueMap<String, Object>> requestEntity
                 = new HttpEntity<>(body, headers);
 
-        String url = filmServiceUrl + "video/" + userId + "/logo";
+        String url = streamingServiceUrl + "video/" + userId + "/logo";
 
         String logoUrl = restTemplate
                 .postForObject(url, requestEntity, String.class);
@@ -152,8 +152,8 @@ public class UserService {
     }
 
     @Autowired
-    public void setFilmServiceUrl(@Value("${endpoint.film-service.url}") String filmServiceUrl) {
-        this.filmServiceUrl = filmServiceUrl;
+    public void setStreamingServiceUrl(@Value("${endpoint.streaming-service.url}") String streamingServiceUrl) {
+        this.streamingServiceUrl = streamingServiceUrl;
     }
 
     @Autowired
