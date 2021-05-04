@@ -2,6 +2,7 @@ package com.moviesandchill.usermanagementservice.advice;
 
 import com.moviesandchill.usermanagementservice.exception.ApiError;
 import com.moviesandchill.usermanagementservice.exception.achievement.AchievementNotFoundException;
+import com.moviesandchill.usermanagementservice.exception.auth.PasswordMismatchException;
 import com.moviesandchill.usermanagementservice.exception.film.FilmNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.globalrole.GlobalRoleNotFoundException;
 import com.moviesandchill.usermanagementservice.exception.staff.StaffNotFoundException;
@@ -23,7 +24,14 @@ public class ExceptionHandlerControllerAdvice {
     })
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public @ResponseBody
-    ApiError handleResourceNotFound(final Exception exception) {
+    ApiError handleResourceNotFoundExceptions(final Exception exception) {
+        return new ApiError(exception);
+    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public @ResponseBody
+    ApiError handlePasswordMismatchException(final Exception exception) {
         return new ApiError(exception);
     }
 
