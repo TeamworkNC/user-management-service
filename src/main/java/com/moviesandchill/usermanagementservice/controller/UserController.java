@@ -5,6 +5,7 @@ import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UpdateUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
+import com.moviesandchill.usermanagementservice.exception.auth.PasswordMismatchException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -60,8 +61,8 @@ public class UserController {
 
 
     @PutMapping("/{userId}/password")
-    public boolean updateUserPassword(@PathVariable long userId, @RequestBody UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
-        return userService.updateUserPassword(userId, updatePasswordDto);
+    public void updateUserPassword(@PathVariable long userId, @RequestBody UpdatePasswordDto updatePasswordDto) throws UserNotFoundException, PasswordMismatchException {
+        userService.updateUserPassword(userId, updatePasswordDto);
     }
 
     @PostMapping(path = "/{userId}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

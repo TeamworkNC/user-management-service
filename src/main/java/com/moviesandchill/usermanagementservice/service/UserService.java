@@ -7,6 +7,7 @@ import com.moviesandchill.usermanagementservice.dto.user.UpdateUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
+import com.moviesandchill.usermanagementservice.exception.auth.PasswordMismatchException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.GlobalRoleRepository;
@@ -78,7 +79,7 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public boolean updateUserPassword(long userId, UpdatePasswordDto updatePasswordDto) throws UserNotFoundException {
+    public void updateUserPassword(long userId, UpdatePasswordDto updatePasswordDto) throws UserNotFoundException, PasswordMismatchException {
         String oldPassword = updatePasswordDto.getOldPassword();
         String newPassword = updatePasswordDto.getNewPassword();
         User user = findUserById(userId);
@@ -86,9 +87,10 @@ public class UserService {
         if (passwordEncoder.matches(oldPassword, user.getPassword().getPasswordHash())) {
             String newPasswordHash = passwordEncoder.encode(newPassword);
             user.getPassword().setPasswordHash(newPasswordHash);
-            return true;
+            return;
         }
-        return false;
+        //else
+        throw new PasswordMismatchException();
     }
 
     public void updateUserLogo(long userId, MultipartFile file) throws UserNotFoundException {
