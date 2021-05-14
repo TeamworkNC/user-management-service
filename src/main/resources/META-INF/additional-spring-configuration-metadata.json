@@ -1,0 +1,30 @@
+{
+  "properties": [
+    {
+      "name": "endpoint.elastic-username",
+      "type": "java.lang.String",
+      "description": "username from elastic"
+    }
+  ],
+  "properties": [
+    {
+      "name": "endpoint.elastic-password",
+      "type": "java.lang.String",
+      "description": "password from elastic"
+    }
+  ],
+  "properties": [
+    {
+      "name": "endpoint.elastic-host",
+      "type": "java.lang.String",
+      "description": "host from elastic"
+    }
+  ],
+  "properties": [
+    {
+      "name": "endpoint.elastic-port",
+      "type": "java.lang.Integer",
+      "description": "port from elastic"
+    }
+  ]
+}

@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -50,5 +51,16 @@ public class ApplicationConfig {
     @PostConstruct
     public void loadIndexUsers() throws Exception {
         esService.loadIndexUsers();
+    }
+
+    @Autowired
+    public void setElasticSettings(@Value("${endpoint.elastic-username}") String usernameElastic,
+                                   @Value("${endpoint.elastic-password}") String passwordElastic,
+                                   @Value("${endpoint.elastic-host}") String hostElastic,
+                                   @Value("${endpoint.elastic-port}") Integer portElastic) {
+        this.usernameElastic = usernameElastic;
+        this.passwordElastic = passwordElastic;
+        this.hostElastic = hostElastic;
+        this.portElastic = portElastic;
     }
 }
