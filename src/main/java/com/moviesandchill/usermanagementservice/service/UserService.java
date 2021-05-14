@@ -15,6 +15,7 @@ import com.moviesandchill.usermanagementservice.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -41,6 +42,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     private RestTemplate restTemplate;
     private String streamingServiceUrl;
+    private EsService esService;
 
     public List<UserDto> getAllUsers() {
         var users = userRepository.findAll();
@@ -58,6 +60,10 @@ public class UserService {
         userPassword.setUser(user);
 
         user = userRepository.save(user);
+        try {
+            esService.loadUser(user.getUserId());
+        } catch (Exception e) {
+        }
         return userMapper.mapToDto(user);
     }
 
@@ -181,5 +187,11 @@ public class UserService {
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+    }
+
+    @Autowired
+    @Lazy
+    public void setEsService(EsService esService) {
+        this.esService = esService;
     }
 }
