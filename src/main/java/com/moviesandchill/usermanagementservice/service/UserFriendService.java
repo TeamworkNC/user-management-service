@@ -46,6 +46,7 @@ public class UserFriendService {
         User user = findUserById(userId);
         User friend = findUserById(friendId);
         user.getFriends().remove(friend);
+        friend.getFriends().remove(user);
     }
 
     private User findUserById(long userId) throws UserNotFoundException {
