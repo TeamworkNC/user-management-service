@@ -69,6 +69,10 @@ public class UserService {
 
     public void deleteAllUsers() {
         userRepository.deleteAll();
+        try {
+            esService.loadIndexUsers();
+        } catch (Exception ignored) {
+        }
     }
 
     public UserDto getUser(long userId) throws UserNotFoundException {
@@ -81,7 +85,11 @@ public class UserService {
         userMapper.updateEntity(user, updateUserDto);
     }
 
-    public void deleteUser(long userId) {
+    public void deleteUser(long userId){
+        try {
+            esService.deleteUser(userId);
+        } catch (Exception e) {
+        }
         userRepository.deleteById(userId);
     }
 
