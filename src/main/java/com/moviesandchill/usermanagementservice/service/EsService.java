@@ -75,7 +75,7 @@ public class EsService {
     public void deleteUser(Long userId) throws Exception {
         SearchRequest searchRequest = new SearchRequest("users");;
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-        queryBuilder.must(QueryBuilders.termQuery(String.valueOf(userId),"userId"));
+        queryBuilder.must(QueryBuilders.multiMatchQuery(userId,"userId"));
         searchRequest.source(new SearchSourceBuilder().query(queryBuilder));
         SearchResponse response = esClient.search(searchRequest, RequestOptions.DEFAULT);
         for(SearchHit hit : response.getHits()){
