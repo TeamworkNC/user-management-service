@@ -5,7 +5,9 @@ import com.moviesandchill.usermanagementservice.dto.password.UpdatePasswordDto;
 import com.moviesandchill.usermanagementservice.dto.user.NewUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UpdateUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
+import com.moviesandchill.usermanagementservice.exception.auth.IncorrectCredentialsException;
 import com.moviesandchill.usermanagementservice.exception.auth.PasswordMismatchException;
+import com.moviesandchill.usermanagementservice.exception.auth.UserIsBannedException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -71,12 +73,22 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public UserDto login(@RequestBody LoginRequestDto loginRequestDto) {
-        return userService.login(loginRequestDto).orElseThrow();
+    public UserDto login(@RequestBody LoginRequestDto loginRequestDto) throws IncorrectCredentialsException, UserIsBannedException {
+        return userService.login(loginRequestDto);
     }
 
     @PostMapping("/register")
     public UserDto register(@RequestBody NewUserDto newUserDto) {
         return userService.register(newUserDto);
+    }
+
+    @PostMapping("/{userId}/ban")
+    public void ban(@PathVariable long userId) throws UserNotFoundException {
+        userService.ban(userId);
+    }
+
+    @PostMapping("/{userId}/unban")
+    public void unban(@PathVariable long userId) throws UserNotFoundException {
+        userService.unban(userId);
     }
 }

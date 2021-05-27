@@ -25,4 +25,6 @@ public class UserDto {
     private String description;
 
     private LocalDate registrationDate;
+
+    private boolean isBanned;
 }

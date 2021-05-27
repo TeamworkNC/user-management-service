@@ -7,7 +7,9 @@ import com.moviesandchill.usermanagementservice.dto.user.UpdateUserDto;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.entity.User;
 import com.moviesandchill.usermanagementservice.entity.UserPassword;
+import com.moviesandchill.usermanagementservice.exception.auth.IncorrectCredentialsException;
 import com.moviesandchill.usermanagementservice.exception.auth.PasswordMismatchException;
+import com.moviesandchill.usermanagementservice.exception.auth.UserIsBannedException;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import com.moviesandchill.usermanagementservice.mapper.UserMapper;
 import com.moviesandchill.usermanagementservice.repository.GlobalRoleRepository;
@@ -28,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -120,25 +121,23 @@ public class UserService {
         user.setLogoUrl(logoUrl);
     }
 
-    public Optional<UserDto> login(LoginRequestDto loginRequestDto) {
+    public UserDto login(LoginRequestDto loginRequestDto) throws IncorrectCredentialsException, UserIsBannedException {
         String login = loginRequestDto.getLogin();
         String password = loginRequestDto.getPassword();
 
-        var userOptional = userRepository.findByLogin(login);
+        var user = userRepository.findByLogin(login).orElseThrow(IncorrectCredentialsException::new);
+        var userId = user.getUserId();
 
-        if (userOptional.isEmpty()) {
-            return Optional.empty();
+        if (user.isBanned()) {
+            throw new UserIsBannedException(userId);
         }
-
-        User user = userOptional.get();
 
         String hash = user.getPassword().getPasswordHash();
 
         if (passwordEncoder.matches(password, hash)) {
-            UserDto dto = userMapper.mapToDto(user);
-            return Optional.of(dto);
+            return userMapper.mapToDto(user);
         }
-        return Optional.empty();
+        throw new IncorrectCredentialsException();
     }
 
     public UserDto register(NewUserDto newUserDto) {
@@ -152,6 +151,16 @@ public class UserService {
 
         user.setGlobalRoles(Set.of(userRole));
         return userMapper.mapToDto(user);
+    }
+
+    public void ban(long userId) throws UserNotFoundException {
+        var user = findUserById(userId);
+        user.setBanned(true);
+    }
+
+    public void unban(long userId) throws UserNotFoundException {
+        var user = findUserById(userId);
+        user.setBanned(false);
     }
 
     private User findUserById(long userId) throws UserNotFoundException {

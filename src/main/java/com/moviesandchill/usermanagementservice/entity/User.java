@@ -38,6 +38,9 @@ public class User {
     @ToString.Exclude
     private UserPassword password;
 
+    @Column(nullable = false)
+    private boolean isBanned = false;
+
     @ManyToMany
     @JoinTable(
             name = "friendship_info",
