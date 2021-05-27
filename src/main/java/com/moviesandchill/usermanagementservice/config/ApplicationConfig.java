@@ -41,7 +41,7 @@ public class ApplicationConfig {
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(usernameElastic, passwordElastic));
         RestHighLevelClient restClient = new RestHighLevelClient(
-                RestClient.builder(new HttpHost(hostElastic, portElastic, "http"))
+                RestClient.builder(new HttpHost(hostElastic, portElastic, "https"))
                         .setHttpClientConfigCallback(httpAsyncClientBuilder ->
                                 httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
                                         .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())));
