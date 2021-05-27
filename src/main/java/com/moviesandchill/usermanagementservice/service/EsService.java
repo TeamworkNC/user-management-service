@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moviesandchill.usermanagementservice.dto.user.UserDto;
 import com.moviesandchill.usermanagementservice.exception.user.UserNotFoundException;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -17,6 +20,10 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RegexpQueryBuilder;
 import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryAction;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.DeleteByQueryRequestBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +70,18 @@ public class EsService {
         indexRequest.id(UUID.randomUUID().toString());
         indexRequest.source(objectMapper.writeValueAsString(user), XContentType.JSON);
         esClient.index(indexRequest, RequestOptions.DEFAULT);
+    }
+
+    public void deleteUser(Long userId) throws Exception {
+        SearchRequest searchRequest = new SearchRequest("users");;
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        queryBuilder.must(QueryBuilders.multiMatchQuery(userId,"userId"));
+        searchRequest.source(new SearchSourceBuilder().query(queryBuilder));
+        SearchResponse response = esClient.search(searchRequest, RequestOptions.DEFAULT);
+        for(SearchHit hit : response.getHits()){
+            String id = hit.getId();
+            esClient.deleteAsync(new DeleteRequest("users",id),RequestOptions.DEFAULT,null);
+        }
     }
 
     public List<UserDto> search(String searchString) throws IOException, UserNotFoundException {
