@@ -86,7 +86,7 @@ public class UserService {
         userMapper.updateEntity(user, updateUserDto);
     }
 
-    public void deleteUser(long userId){
+    public void deleteUser(long userId) {
         try {
             esService.deleteUser(userId);
         } catch (Exception e) {
@@ -169,6 +169,11 @@ public class UserService {
     public void unban(long userId) throws UserNotFoundException {
         var user = findUserById(userId);
         user.setBanned(false);
+    }
+
+    public void setOnline(long userId, boolean isOnline) throws UserNotFoundException {
+        var user = findUserById(userId);
+        user.setOnline(isOnline);
     }
 
     private User findUserById(long userId) throws UserNotFoundException {

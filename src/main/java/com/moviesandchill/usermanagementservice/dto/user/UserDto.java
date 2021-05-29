@@ -27,4 +27,6 @@ public class UserDto {
     private LocalDate registrationDate;
 
     private boolean isBanned;
+
+    private boolean isOnline;
 }

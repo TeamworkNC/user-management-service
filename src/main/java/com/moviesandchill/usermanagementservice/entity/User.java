@@ -33,13 +33,16 @@ public class User {
     @Column(nullable = false)
     private LocalDate registrationDate = LocalDate.now();
 
+    @Column(nullable = false)
+    private boolean isBanned = false;
+
+    @Column(nullable = false)
+    private boolean isOnline = false;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private UserPassword password;
-
-    @Column(nullable = false)
-    private boolean isBanned = false;
 
     @ManyToMany
     @JoinTable(

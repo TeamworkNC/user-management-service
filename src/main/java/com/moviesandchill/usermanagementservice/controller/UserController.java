@@ -91,4 +91,9 @@ public class UserController {
     public void unban(@PathVariable long userId) throws UserNotFoundException {
         userService.unban(userId);
     }
+
+    @PostMapping("/{userId}/online")
+    public void setOnline(@PathVariable long userId, @RequestBody boolean isOnline) throws UserNotFoundException {
+        userService.setOnline(userId, isOnline);
+    }
 }
