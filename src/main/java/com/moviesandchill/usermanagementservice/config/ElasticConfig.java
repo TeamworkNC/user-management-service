@@ -22,6 +22,8 @@ import javax.annotation.PostConstruct;
 @Profile("!test")
 public class ElasticConfig {
 
+    @Autowired
+    @Lazy
     private EsService esService;
 
     @Bean
@@ -44,11 +46,5 @@ public class ElasticConfig {
     @PostConstruct
     public void loadIndexUsers() throws Exception {
         esService.loadIndexUsers();
-    }
-
-    @Autowired
-    @Lazy
-    public void setEsService(EsService esService) {
-        this.esService = esService;
     }
 }
