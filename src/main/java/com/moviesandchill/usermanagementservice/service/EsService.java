@@ -22,6 +22,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,11 @@ public class EsService {
     public EsService(RestHighLevelClient esClient, UserService userService) {
         this.esClient = esClient;
         this.userService = userService;
+    }
+
+    @PostConstruct
+    public void init() throws Exception {
+        loadIndexUsers();
     }
 
     public void loadIndexUsers() throws Exception {
