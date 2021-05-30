@@ -14,13 +14,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
 
 import javax.annotation.PostConstruct;
 
 @Configuration
+@Profile("!test")
 public class ElasticConfig {
-    @Autowired
-    @Lazy
+
     private EsService esService;
 
     @Bean
@@ -28,12 +29,13 @@ public class ElasticConfig {
             @Value("${endpoint.elastic-username}") String usernameElastic,
             @Value("${endpoint.elastic-password}") String passwordElastic,
             @Value("${endpoint.elastic-host}") String hostElastic,
-            @Value("${endpoint.elastic-port}") Integer portElastic
+            @Value("${endpoint.elastic-port}") Integer portElastic,
+            @Value("${endpoint.elastic-scheme}") String schemeElastic
     ) {
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(usernameElastic, passwordElastic));
         return new RestHighLevelClient(
-                RestClient.builder(new HttpHost(hostElastic, portElastic, "https"))
+                RestClient.builder(new HttpHost(hostElastic, portElastic, schemeElastic))
                         .setHttpClientConfigCallback(httpAsyncClientBuilder ->
                                 httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider)
                                         .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy())));
@@ -42,5 +44,11 @@ public class ElasticConfig {
     @PostConstruct
     public void loadIndexUsers() throws Exception {
         esService.loadIndexUsers();
+    }
+
+    @Autowired
+    @Lazy
+    public void setEsService(EsService esService) {
+        this.esService = esService;
     }
 }
